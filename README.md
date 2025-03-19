@@ -1,5 +1,7 @@
 # 🧖‍♂️ Massage Appointment
 
+![MassageAppointment](assets/massage_appointment_demo.png)
+
 Um sistema simples de agendamento de massagem onde os usuários podem escolher o horário desejado e informar o nome. O nome será adicionado à lista de agendamentos.
 
 🚀 Tecnologias Utilizadas
@@ -13,6 +15,8 @@ Um sistema simples de agendamento de massagem onde os usuários podem escolher o
 📸 Demonstração
 
 
+
+Nota: Certifique-se de adicionar a imagem massage_appointment_demo.png à pasta assets/ no seu repositório para que ela seja exibida corretamente.
 
 📌 Funcionalidades
 
@@ -45,10 +49,10 @@ O projeto conta com um design leve e moderno, garantindo uma experiência agrad�
 ├── 🎨 style.css       # Estilos do projeto
 ├── ⚙️ script.js       # Lógica de funcionamento
 ├── 🖥️ serve.js        # Servidor
+├── 📂 assets/         # Pasta para imagens e mídias
+│   └── 🖼️ massage_appointment_demo.png  # Imagem de demonstração
 └── 📜 README.md       # Documentação
 
 🚀 Melhorias Futuras
 
-🔹 Validação de horários duplicados🔹 Integração com banco de dados para armazenamento persistente
-
-
+🔹 Validação de horários duplicados🔹 Integração com banco de dados para armazenamento persistente🔹 Notificações de confirmação de agendamento
