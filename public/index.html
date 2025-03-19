@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agendamento de Massagem</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="gui/themes/img/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <header>
+        <h1>Agendamento de Massagem</h1>
+    </header>
+    <div class="container">
+        <div class="print-button-container">
+            <button class="print-button" onclick="printWaitlist()">Imprimir Lista</button>
+        </div>
+        <div class="tab-buttons">
+            <button class="tab-button" onclick="showTab('current')"><h5 id="current-date-button">Dia Corrente</h5></button>
+            <button class="tab-button" onclick="showTab('next')"><h5 id="next-date-button">Dia Corrente + 1</h5></button>
+        </div>
+        <div id="tab-current" class="tab-content active">
+            <h3 id="current-date">Dia Corrente</h3>
+            <div id="time-slots-current"></div>
+            <div id="waitlist-current">
+                <h2>Lista</h2>
+                <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
+            </div>
+        </div>
+        <div id="tab-next" class="tab-content">
+            <h3 id="next-date">Dia Corrente + 1</h3>
+            <div id="time-slots-next"></div>
+            <div id="waitlist-next">
+                <h2>Lista</h2>
+                <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
+            </div>
+        </div>
+    </div>
+    <footer class="footer">
+        Desenvolvido pela equipe de Q.A
+    </footer>
+    <script src="script.js"></script>
+</body>
+</html>
