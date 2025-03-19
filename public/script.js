@@ -103,12 +103,24 @@ function printWaitlist() {
     const currentDatePrint = new Date();
     const nextDatePrint = new Date();
     nextDatePrint.setDate(currentDatePrint.getDate() + 1);
+
     printWindow.document.write('<html><head><title>Lista</title>');
+    printWindow.document.write('<style>');
+    printWindow.document.write('table { width: 100%; border-collapse: collapse; }');
+    printWindow.document.write('th, td { border: 1px solid black; padding: 8px; text-align: left; }');
+    printWindow.document.write('</style>');
     printWindow.document.write('</head><body>');
+    
     printWindow.document.write(`<h1>Lista - ${formatDate(currentDatePrint)}</h1>`);
-    printWindow.document.write(currentWaitlist);
+    printWindow.document.write('<table><thead><tr><th>Nome</th><th>Assinatura</th></tr></thead><tbody>');
+    printWindow.document.write(currentWaitlist.replace(/<div class="waitlist-item">/g, '<tr><td>').replace(/<\/div>/g, '</td><td></td></tr>'));
+    printWindow.document.write('</tbody></table>');
+    
     printWindow.document.write(`<h1>Lista - ${formatDate(nextDatePrint)}</h1>`);
-    printWindow.document.write(nextWaitlist);
+    printWindow.document.write('<table><thead><tr><th>Nome</th><th>Assinatura</th></tr></thead><tbody>');
+    printWindow.document.write(nextWaitlist.replace(/<div class="waitlist-item">/g, '<tr><td>').replace(/<\/div>/g, '</td><td></td></tr>'));
+    printWindow.document.write('</tbody></table>');
+    
     printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.print();
