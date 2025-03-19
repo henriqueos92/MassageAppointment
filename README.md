@@ -1,4 +1,4 @@
-🧖‍♂️ Massage Appointment
+# 🧖‍♂️ Massage Appointment
 
 Um sistema simples de agendamento de massagem onde os usuários podem escolher o horário desejado e informar o nome. O nome será adicionado à lista de agendamentos.
 
