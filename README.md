@@ -1,6 +1,6 @@
 # 🧖‍♂️ Massage Appointment
 
-![MassageAppointment](assets/massage_appointment_demo.png)
+![MassageAppointment](public/assets/massage_appointment_demo.png)
 
 Um sistema simples de agendamento de massagem onde os usuários podem escolher o horário desejado e informar o nome. O nome será adicionado à lista de agendamentos.
 
