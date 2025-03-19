@@ -55,4 +55,4 @@ O projeto conta com um design leve e moderno, garantindo uma experiência agrad�
 
 🚀 Melhorias Futuras
 
-🔹 Validação de horários duplicados🔹 Integração com banco de dados para armazenamento persistente🔹 Notificações de confirmação de agendamento
+🔹 Validação de horários duplicados🔹 Integração com banco de dados para armazenamento persistente

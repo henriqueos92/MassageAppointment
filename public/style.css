@@ -1,3 +1,10 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
@@ -5,7 +12,7 @@ body {
     padding: 0;
     display: flex;
     flex-direction: column;
-    min-height: 100vh;
+    height: 100%;
 }
 
 header {
@@ -18,8 +25,10 @@ header {
 }
 
 .container {
-    padding: 20px;
     flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
 }
 
 .tab-buttons {
@@ -109,12 +118,11 @@ button:disabled {
 
 .footer {
     text-align: center;
-    padding-bottom: 10px;
     background-color: #f0f0f0;
     color: #aaaaaa;
     width: 100%;
-    position: absolute;
     bottom: 0;
+    flex-shrink: 0; 
 }
 
 .print-button-container {
@@ -137,4 +145,16 @@ button:disabled {
 
 .print-button:hover {
     background-color: #45a049;
+}
+
+.rodape {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
 }
