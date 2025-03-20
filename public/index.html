@@ -23,7 +23,7 @@
             <h3 id="current-date">Dia Corrente</h3>
             <div id="time-slots-current"></div>
             <div id="waitlist-current">
-                <h2>Lista</h2>
+                <h3>Lista</h3>
                 <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
             </div>
         </div>
@@ -31,11 +31,25 @@
             <h3 id="next-date">Dia Corrente + 1</h3>
             <div id="time-slots-next"></div>
             <div id="waitlist-next">
-                <h2>Lista</h2>
+                <h3>Lista</h3>
                 <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
             </div>
         </div>
     </div>
+    <!-- Modal para solicitar a senha -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <p>Digite a senha:</p>
+            <input type="password" id="passwordInput">
+            <button id="passwordSubmit">Enviar</button>
+        </div>
+    </div>
+
+    <script>
+        const clearPassword = "${process.env.CLEAR_PASSWORD}";
+    </script>
+    
     <script src="script.js"></script>
     <div class="rodape">
         <footer class="footer">

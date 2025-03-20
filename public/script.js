@@ -126,6 +126,79 @@ function printWaitlist() {
     printWindow.print();
 }
 
+async function clearAll() {
+    // Envia uma solicitação ao backend para limpar os dados
+    const response = await fetch('/clearBookings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (response.ok) {
+        bookedSlots.current = {};
+        bookedSlots.next = {};
+        
+        renderTimeSlots('current');
+        renderTimeSlots('next');
+        
+        updateWaitlist('current');
+        updateWaitlist('next');
+        
+        alert('Horários e listas foram limpos.');
+    } else {
+        alert('Erro ao limpar os horários e a listas.');
+    }
+}
+
+// Função para abrir o modal de senha
+function openPasswordModal() {
+    const modal = document.getElementById('passwordModal');
+    const closeBtn = document.getElementsByClassName('close')[0];
+    const submitBtn = document.getElementById('passwordSubmit');
+    const passwordInput = document.getElementById('passwordInput');
+
+    modal.style.display = 'block';
+
+    closeBtn.onclick = function() {
+        modal.style.display = 'none';
+    }
+
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = 'none';
+        }
+    }
+
+    submitBtn.onclick = function() {
+        const password = passwordInput.value;
+        
+        if (password === "aZship@2025") {
+            clearAll();
+            modal.style.display = 'none';
+        } else {
+            alert('Senha incorreta.');
+        }
+    }
+}
+
+/*document.addEventListener('keydown', function(event) {
+    if (event.ctrlKey && event.shiftKey && event.key === 'L') {
+        const password = prompt('Digite a senha:');
+        if (password === clearPassword) {
+            clearAll();
+        } else {
+            alert('Senha incorreta.');
+        }
+    }
+});*/
+
+document.addEventListener('keydown', function(event) {
+    if (event.ctrlKey && event.shiftKey && event.key === 'L') {
+        openPasswordModal();
+    }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
     setDates();
     showTab('current'); // Mostra a aba do dia corrente por padrão
