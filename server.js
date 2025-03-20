@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
                     <h3 id="current-date">Dia Corrente</h3>
                     <div id="time-slots-current"></div>
                     <div id="waitlist-current">
-                        <h2>Lista</h2>
+                        <h3>Lista</h3>
                         <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
                     </div>
                 </div>
@@ -68,7 +68,7 @@ app.get('/', (req, res) => {
                     <h3 id="next-date">Dia Corrente + 1</h3>
                     <div id="time-slots-next"></div>
                     <div id="waitlist-next">
-                        <h2>Lista</h2>
+                        <h3>Lista</h3>
                         <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
                     </div>
                 </div>

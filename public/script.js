@@ -70,7 +70,7 @@ function renderTimeSlots(day) {
 
 function updateWaitlist(day) {
     const container = document.getElementById(`waitlist-${day}`);
-    container.innerHTML = '<h2>Lista</h2>';
+    container.innerHTML = '<h3>Lista</h3>';
 
     // Ordena os horários
     const sortedSlots = Object.keys(bookedSlots[day])
@@ -111,12 +111,12 @@ function printWaitlist() {
     printWindow.document.write('</style>');
     printWindow.document.write('</head><body>');
     
-    printWindow.document.write(`<h1>Lista - ${formatDate(currentDatePrint)}</h1>`);
+    printWindow.document.write(`<h2>Lista - ${formatDate(currentDatePrint)}</h2>`);
     printWindow.document.write('<table><thead><tr><th>Nome</th><th>Assinatura</th></tr></thead><tbody>');
     printWindow.document.write(currentWaitlist.replace(/<div class="waitlist-item">/g, '<tr><td>').replace(/<\/div>/g, '</td><td></td></tr>'));
     printWindow.document.write('</tbody></table>');
     
-    printWindow.document.write(`<h1>Lista - ${formatDate(nextDatePrint)}</h1>`);
+    printWindow.document.write(`<h2>Lista - ${formatDate(nextDatePrint)}</h2>`);
     printWindow.document.write('<table><thead><tr><th>Nome</th><th>Assinatura</th></tr></thead><tbody>');
     printWindow.document.write(nextWaitlist.replace(/<div class="waitlist-item">/g, '<tr><td>').replace(/<\/div>/g, '</td><td></td></tr>'));
     printWindow.document.write('</tbody></table>');
