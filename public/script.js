@@ -159,6 +159,7 @@ function openPasswordModal() {
     const passwordInput = document.getElementById('passwordInput');
 
     modal.style.display = 'block';
+    passwordInput.focus();
 
     closeBtn.onclick = function() {
         modal.style.display = 'none';
@@ -180,6 +181,12 @@ function openPasswordModal() {
             alert('Senha incorreta.');
         }
     }
+
+    passwordInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            submitBtn.onclick();
+        }
+    });
 }
 
 /*document.addEventListener('keydown', function(event) {
