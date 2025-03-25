@@ -46,12 +46,12 @@ O projeto conta com um design leve e moderno, garantindo uma experiência agrad�
 
 📁 MassageAppointment/  
 │   └── 📂 public  
-│&nbsp;&nbsp;└── 📂 assets # Pasta para imagens e mídias  
-│&nbsp;&nbsp;&nbsp;└── 🖼️ massage_appointment_demo.png  # Imagem de demonstração  
-│&nbsp;&nbsp;└── 📂 gui  
-│&nbsp;&nbsp;&nbsp;└── 📂 themes  
-│&nbsp;&nbsp;&nbsp;&nbsp;└── 📂 icon  
-│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── ⭐ favicon.icon  # Ícones para a aba do navegador              
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 📂 assets # Pasta para imagens e mídias  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 🖼️ massage_appointment_demo.png  # Imagem de demonstração  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 📂 gui  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 📂 themes  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 📂 icon  
+│&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── ⭐ favicon.icon  # Ícones para a aba do navegador              
 ├────── 📄 index.html      # Estrutura da página  
 ├────── ⚙️ script.js       # Lógica de funcionamento  
 ├────── 🎨 style.css       # Estilos do projeto  
