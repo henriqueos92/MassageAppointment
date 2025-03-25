@@ -207,3 +207,51 @@ button:disabled {
     text-decoration: none;
     cursor: pointer;
 }
+
+@media (max-width: 768px) {
+    body {
+        padding: 0px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .tab-buttons {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .tab-button {
+        width: 100%; /* Botões ocupam toda a largura */
+        font-size: 14px; /* Reduz o tamanho da fonte */
+    }
+
+    .tab-content {
+        width: 100%; /* Ajusta a largura do conteúdo */
+        margin: 10px 0; /* Reduz a margem */
+    }
+
+    #time-slots {
+        width: 100%; /* Ajusta a largura dos slots */
+    }
+
+    .modal-content {
+        width: 90%; /* Ajusta a largura do modal em telas menores */
+    }
+
+    .print-button-container {
+        position: static; /* Remove a posição fixa */
+        text-align: center; /* Centraliza o botão */
+        margin-top: 10px;
+    }
+
+    .waitlist-item {
+        align-items: flex-start;
+    }
+
+    .rodape {
+        position: static; /* Remove a posição fixa */
+        padding: 10px;
+    }
+}
