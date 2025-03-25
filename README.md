@@ -1,4 +1,4 @@
-# 🧖‍♂️ Massage Appointment
+# 🧖‍♂️ `Massage Appointment`
 
 ![MassageAppointment](public/assets/massage_appointment_demo.png)
 
@@ -44,14 +44,20 @@ O projeto conta com um design leve e moderno, garantindo uma experiência agrad�
 
 📂 Estrutura do Projeto
 
-📁 MassageAppointment/
-├── 📄 index.html      # Estrutura da página  
-├── 🎨 style.css       # Estilos do projeto  
-├── ⚙️ script.js       # Lógica de funcionamento  
+📁 MassageAppointment/  
+│   └── 📂 public  
+│       └── 📂 assets # Pasta para imagens e mídias  
+│           └── 🖼️ massage_appointment_demo.png  # Imagem de demonstração  
+│       └── 📂 gui  
+│           └── 📂 themes
+│               └── 📂 icon
+│           └── ⭐ favicon.icon  # Ícones para a aba do navegador              
+├────── 📄 index.html      # Estrutura da página  
+├────── ⚙️ script.js       # Lógica de funcionamento  
+├────── 🎨 style.css       # Estilos do projeto  
+├── ⚙️ .env            # Variáveis de ambiente    
+├── 📜 README.md       # Documentação  
 ├── 🖥️ serve.js        # Servidor  
-├── 📂 assets/         # Pasta para imagens e mídias  
-│   └── 🖼️ massage_appointment_demo.png  # Imagem de demonstração  
-└── 📜 README.md       # Documentação  
 
 🚀 Melhorias Futuras
 
