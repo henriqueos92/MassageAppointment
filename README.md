@@ -45,13 +45,13 @@ O projeto conta com um design leve e moderno, garantindo uma experiência agrad�
 📂 Estrutura do Projeto
 
 📁 MassageAppointment/
-├── 📄 index.html      # Estrutura da página
-├── 🎨 style.css       # Estilos do projeto
-├── ⚙️ script.js       # Lógica de funcionamento
-├── 🖥️ serve.js        # Servidor
-├── 📂 assets/         # Pasta para imagens e mídias
-│   └── 🖼️ massage_appointment_demo.png  # Imagem de demonstração
-└── 📜 README.md       # Documentação
+├── 📄 index.html      # Estrutura da página  
+├── 🎨 style.css       # Estilos do projeto  
+├── ⚙️ script.js       # Lógica de funcionamento  
+├── 🖥️ serve.js        # Servidor  
+├── 📂 assets/         # Pasta para imagens e mídias  
+│   └── 🖼️ massage_appointment_demo.png  # Imagem de demonstração  
+└── 📜 README.md       # Documentação  
 
 🚀 Melhorias Futuras
 
