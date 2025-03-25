@@ -14,6 +14,17 @@ function formatDate(date) {
     return date.toLocaleDateString('pt-BR', options);
 }
 
+const INITIAL_CURRENT_DATE = new Date();
+const INITIAL_NEXT_DATE = new Date();
+INITIAL_NEXT_DATE.setDate(INITIAL_CURRENT_DATE.getDate() + 1);
+
+function setInitialDates() {
+    document.getElementById('current-date-button').innerText = `${formatDate(INITIAL_CURRENT_DATE)}`;
+    document.getElementById('next-date-button').innerText = `${formatDate(INITIAL_NEXT_DATE)}`;
+    document.getElementById('current-date').innerText = `${formatDate(INITIAL_CURRENT_DATE)}`;
+    document.getElementById('next-date').innerText = `${formatDate(INITIAL_NEXT_DATE)}`;
+}
+
 function setDates() {
     const currentDate = new Date();
     const nextDate = new Date();
@@ -127,7 +138,6 @@ function printWaitlist() {
 }
 
 async function clearAll() {
-    // Envia uma solicitação ao backend para limpar os dados
     const response = await fetch('/clearBookings', {
         method: 'POST',
         headers: {
@@ -144,6 +154,9 @@ async function clearAll() {
         
         updateWaitlist('current');
         updateWaitlist('next');
+
+        // Atualiza as datas para o dia corrente e o próximo dia ao limpar os horários
+        setDates();
         
         alert('Horários e listas foram limpos.');
     } else {
@@ -151,7 +164,6 @@ async function clearAll() {
     }
 }
 
-// Função para abrir o modal de senha
 function openPasswordModal() {
     const modal = document.getElementById('passwordModal');
     const closeBtn = document.getElementsByClassName('close')[0];
@@ -207,7 +219,7 @@ document.addEventListener('keydown', function(event) {
 });
 
 document.addEventListener('DOMContentLoaded', () => {
-    setDates();
+    setInitialDates();
     showTab('current'); // Mostra a aba do dia corrente por padrão
     fetchBookings();
 });
