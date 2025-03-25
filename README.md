@@ -51,7 +51,7 @@ O projeto conta com um design leve e moderno, garantindo uma experiência agrad�
 │       └── 📂 gui  
 │           └── 📂 themes  
 │               └── 📂 icon  
-│           └── ⭐ favicon.icon  # Ícones para a aba do navegador              
+│                   └── ⭐ favicon.icon  # Ícones para a aba do navegador              
 ├────── 📄 index.html      # Estrutura da página  
 ├────── ⚙️ script.js       # Lógica de funcionamento  
 ├────── 🎨 style.css       # Estilos do projeto  
