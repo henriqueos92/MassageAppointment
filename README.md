@@ -15,10 +15,7 @@ Um sistema simples de agendamento de massagem onde os usuários podem escolher o
 📸 Demonstração
 
 
-
-Nota: Certifique-se de adicionar a imagem massage_appointment_demo.png à pasta assets/ no seu repositório para que ela seja exibida corretamente.
-
-📌 Funcionalidades
+## 📌 Funcionalidades
 
 ✔️ Escolha do horário desejado✔️ Inserção do nome para agendamento✔️ Apresentação da lista de agendamentos em tempo real✔️ Interface amigável e intuitiva
 
