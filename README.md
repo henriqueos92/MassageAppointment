@@ -1,4 +1,4 @@
-# 🧖‍♂️ `Massage Appointment`
+# 🧖‍♂️ Massage Appointment
 
 ![MassageAppointment](public/assets/massage_appointment_demo.png)
 
@@ -52,9 +52,9 @@ O projeto conta com um design leve e moderno, garantindo uma experiência agrad�
 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 📂 themes  
 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── 📂 icon  
 │&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└── ⭐ favicon.icon  # Ícones para a aba do navegador              
-├────── 📄 index.html      # Estrutura da página  
-├────── ⚙️ script.js       # Lógica de funcionamento  
-├────── 🎨 style.css       # Estilos do projeto  
+├───── 📄 index.html      # Estrutura da página  
+├───── ⚙️ script.js       # Lógica de funcionamento  
+├───── 🎨 style.css       # Estilos do projeto  
 ├── ⚙️ .env            # Variáveis de ambiente    
 ├── 📜 README.md       # Documentação  
 ├── 🖥️ serve.js        # Servidor  
