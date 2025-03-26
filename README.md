@@ -17,9 +17,13 @@ Um sistema simples de agendamento de massagem onde os usuários podem escolher o
 
 ## 📌 Funcionalidades
 
-✔️ Escolha do horário desejado✔️ Inserção do nome para agendamento✔️ Apresentação da lista de agendamentos em tempo real✔️ Interface amigável e intuitiva
+✔️ Escolha do horário desejado
+✔️ Inserção do nome para agendamento
+✔️ Apresentação da lista de agendamentos em tempo real
+✔️ Modal de Senha para Limpar a lista de agendamentos com comando oculto
+✔️ Interface amigável e intuitiva
 
-🛠️ Como Executar o Projeto
+## 🛠️ Como Executar o Projeto
 
 Clone este repositório:
 
@@ -33,9 +37,9 @@ Execute o servidor com o seguinte comando:
 
 node serve.js
 
-Acesse o sistema no navegador.
+Acesse o sistema no navegador http://localhost:3000
 
-🎨 Estilização
+## 🎨 Estilização
 
 O projeto conta com um design leve e moderno, garantindo uma experiência agradável para os usuários.
 
@@ -56,6 +60,6 @@ O projeto conta com um design leve e moderno, garantindo uma experiência agrad�
 ├── 📜 README.md       # Documentação  
 ├── 🖥️ serve.js        # Servidor  
 
-🚀 Melhorias Futuras
+## 🚀 Melhorias Futuras
 
-🔹 Validação de horários duplicados🔹 Integração com banco de dados para armazenamento persistente
+🔹 Validação de horários duplicados 🔹 Integração com banco de dados para armazenamento persistente
