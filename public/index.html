@@ -15,24 +15,26 @@
         </div>
     </header>
     <div class="container main-content">
-        <div class="tab-buttons">
-            <button class="tab-button" onclick="showTab('current')"><h5 id="current-date-button">Dia Corrente</h5></button>
-            <button class="tab-button" onclick="showTab('next')"><h5 id="next-date-button">Dia Corrente + 1</h5></button>
-        </div>
-        <div id="tab-current" class="tab-content active">
-            <h3 id="current-date">Dia Corrente</h3>
-            <div id="time-slots-current"></div>
-            <div id="waitlist-current">
-                <h3>Lista</h3>
-                <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
+        <div class="white-background">
+            <div class="tab-buttons">
+                <button class="tab-button" onclick="showTab('current')"><h5 id="current-date-button">Dia Corrente</h5></button>
+                <button class="tab-button" onclick="showTab('next')"><h5 id="next-date-button">Dia Corrente + 1</h5></button>
             </div>
-        </div>
-        <div id="tab-next" class="tab-content">
-            <h3 id="next-date">Dia Corrente + 1</h3>
-            <div id="time-slots-next"></div>
-            <div id="waitlist-next">
-                <h3>Lista</h3>
-                <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
+            <div id="tab-current" class="tab-content active">
+                <h3 id="current-date">Dia Corrente</h3>
+                <div id="time-slots-current"></div>
+                <div id="waitlist-current">
+                    <h3>Lista</h3>
+                    <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
+                </div>
+            </div>
+            <div id="tab-next" class="tab-content">
+                <h3 id="next-date">Dia Corrente + 1</h3>
+                <div id="time-slots-next"></div>
+                <div id="waitlist-next">
+                    <h3>Lista</h3>
+                    <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
+                </div>
             </div>
         </div>
     </div>
