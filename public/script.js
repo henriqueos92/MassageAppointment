@@ -37,8 +37,11 @@ function setDates() {
 }
 
 async function bookSlot(slot, day) {
-    const name = prompt('Digite seu nome:');
+    let name = prompt('Digite seu nome:');
     if (name) {
+        // Formata o nome: primeira letra maiúscula, restante minúscula
+        name = name.trim().toLowerCase().split(' ').map(word => word.replace(/^\w/, c => c.toUpperCase())).join(' ');
+
         const response = await fetch('/bookings', {
             method: 'POST',
             headers: {
@@ -98,6 +101,12 @@ function updateWaitlist(day) {
         div.innerHTML = `<input type="checkbox" checked disabled> ${slot} - ${bookedSlots[day][slot]}`;
         container.appendChild(div);
     });
+}
+
+function startAutoRefresh(interval = 1000) {
+    setInterval(() => {
+        fetchBookings();
+    }, interval);
 }
 
 function showTab(day) {
@@ -222,4 +231,5 @@ document.addEventListener('DOMContentLoaded', () => {
     setInitialDates();
     showTab('current'); // Mostra a aba do dia corrente por padrão
     fetchBookings();
+    startAutoRefresh();
 });
