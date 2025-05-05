@@ -14,8 +14,8 @@ function formatDate(date) {
     return date.toLocaleDateString('pt-BR', options);
 }
 
-const INITIAL_CURRENT_DATE = new Date();
-const INITIAL_NEXT_DATE = new Date();
+let INITIAL_CURRENT_DATE = new Date();
+let INITIAL_NEXT_DATE = new Date();
 INITIAL_NEXT_DATE.setDate(INITIAL_CURRENT_DATE.getDate() + 1);
 
 function setInitialDates() {
@@ -25,7 +25,7 @@ function setInitialDates() {
     document.getElementById('next-date').innerText = `${formatDate(INITIAL_NEXT_DATE)}`;
 }
 
-function setDates() {
+/*function setDates() {
     const currentDate = new Date();
     const nextDate = new Date();
     nextDate.setDate(currentDate.getDate() + 1);
@@ -34,7 +34,7 @@ function setDates() {
     document.getElementById('next-date-button').innerText = `${formatDate(nextDate)}`;
     document.getElementById('current-date').innerText = `${formatDate(currentDate)}`;
     document.getElementById('next-date').innerText = `${formatDate(nextDate)}`;
-}
+}*/
 
 async function bookSlot(slot, day) {
     let name = prompt('Digite seu nome:');
@@ -120,27 +120,30 @@ function printWaitlist() {
     const currentWaitlist = document.getElementById('waitlist-current').innerHTML;
     const nextWaitlist = document.getElementById('waitlist-next').innerHTML;
     const printWindow = window.open('', '', 'height=600,width=800');
-    const currentDatePrint = new Date();
-    const nextDatePrint = new Date();
+    const currentDatePrint = INITIAL_CURRENT_DATE;
+    const nextDatePrint = INITIAL_NEXT_DATE;
     nextDatePrint.setDate(currentDatePrint.getDate() + 1);
 
     printWindow.document.write('<html><head><title>Lista</title>');
     printWindow.document.write('<style>');
     printWindow.document.write('table { width: 100%; border-collapse: collapse; }');
     printWindow.document.write('th, td { border: 1px solid black; padding: 8px; text-align: left; }');
+    printWindow.document.write('th { width: 50%; }'); // Define a largura da coluna "Nome"
+    printWindow.document.write('td:nth-child(1) { width: 50%; }'); // Define a largura da coluna "Nome" no corpo
+    printWindow.document.write('td:nth-child(2) { width: 50%; }'); // Define a largura da coluna "Assinatura" no corpo
     printWindow.document.write('</style>');
     printWindow.document.write('</head><body>');
-    
+
     printWindow.document.write(`<h2>Lista - ${formatDate(currentDatePrint)}</h2>`);
     printWindow.document.write('<table><thead><tr><th>Nome</th><th>Assinatura</th></tr></thead><tbody>');
     printWindow.document.write(currentWaitlist.replace(/<div class="waitlist-item">/g, '<tr><td>').replace(/<\/div>/g, '</td><td></td></tr>'));
     printWindow.document.write('</tbody></table>');
-    
+
     printWindow.document.write(`<h2>Lista - ${formatDate(nextDatePrint)}</h2>`);
     printWindow.document.write('<table><thead><tr><th>Nome</th><th>Assinatura</th></tr></thead><tbody>');
     printWindow.document.write(nextWaitlist.replace(/<div class="waitlist-item">/g, '<tr><td>').replace(/<\/div>/g, '</td><td></td></tr>'));
     printWindow.document.write('</tbody></table>');
-    
+
     printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.print();
@@ -158,6 +161,22 @@ async function clearAll() {
         bookedSlots.current = {};
         bookedSlots.next = {};
         
+        // Permite que o usuário defina as novas datas
+        const currentDateInput = prompt('Digite a data do Dia Corrente (formato: MM-DD-YYYY):');
+        const nextDateInput = prompt('Digite a data do Dia Seguinte (formato: MM-DD-YYYY):');
+
+        if (currentDateInput && nextDateInput) {
+            INITIAL_CURRENT_DATE = new Date(currentDateInput);
+            INITIAL_NEXT_DATE = new Date(nextDateInput);
+
+            // Salva as datas no localStorage
+            localStorage.setItem('INITIAL_CURRENT_DATE', INITIAL_CURRENT_DATE.toISOString());
+            localStorage.setItem('INITIAL_NEXT_DATE', INITIAL_NEXT_DATE.toISOString());
+
+            // Atualiza os elementos da interface com as novas datas
+            setInitialDates();
+        }
+
         renderTimeSlots('current');
         renderTimeSlots('next');
         
@@ -165,7 +184,7 @@ async function clearAll() {
         updateWaitlist('next');
 
         // Atualiza as datas para o dia corrente e o próximo dia ao limpar os horários
-        setDates();
+        //setDates();
         
         alert('Horários e listas foram limpos.');
     } else {
@@ -227,9 +246,59 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+function checkForUpcomingMassages() {
+    const now = new Date();
+    const currentDateString = INITIAL_CURRENT_DATE.toDateString();
+    const nextDateString = INITIAL_NEXT_DATE.toDateString();
+    const nowDateString = now.toDateString();
+
+    console.log(`Verificando horários: ${now.getHours()}:${now.getMinutes()}`);
+
+    const checkSlots = (slots, date, dateString) => {
+        if (nowDateString === dateString) {
+            Object.keys(slots).forEach(slot => {
+                const [hour, minute] = slot.split(':').map(Number);
+
+                // Verifica se o horário atual é 2 minutos antes do horário reservado
+                const slotTime = new Date();
+                slotTime.setHours(hour, minute, 0, 0); // Define o horário do slot
+                const timeDifference = (slotTime - now) / (1000 * 60); // Diferença em minutos
+
+                if (timeDifference > 0 && timeDifference <= 2) {
+                    const name = slots[slot];
+                    alert(`Sua massagem está próxima, ${name}!\nHorário: ${slot} (Dia: ${formatDate(new Date(date))})`);
+                }
+            });
+        }
+    };
+
+    // Verifica os horários para o dia atual e o próximo dia
+    checkSlots(bookedSlots.current, INITIAL_CURRENT_DATE, currentDateString);
+    checkSlots(bookedSlots.next, INITIAL_NEXT_DATE, nextDateString);
+}
+
+function startNotificationChecker() {
+    setInterval(() => {
+        checkForUpcomingMassages();
+    }, 60000);
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+    // Carrega as datas do localStorage, se disponíveis
+    const savedCurrentDate = localStorage.getItem('INITIAL_CURRENT_DATE');
+    const savedNextDate = localStorage.getItem('INITIAL_NEXT_DATE');
+
+    if (savedCurrentDate && savedNextDate) {
+        INITIAL_CURRENT_DATE = new Date(savedCurrentDate);
+        INITIAL_NEXT_DATE = new Date(savedNextDate);
+    } else {
+        INITIAL_CURRENT_DATE = new Date();
+        INITIAL_NEXT_DATE = new Date();
+        INITIAL_NEXT_DATE.setDate(INITIAL_CURRENT_DATE.getDate() + 1);
+    }
     setInitialDates();
     showTab('current'); // Mostra a aba do dia corrente por padrão
     fetchBookings();
     startAutoRefresh();
+    startNotificationChecker();
 });
