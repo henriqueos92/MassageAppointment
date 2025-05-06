@@ -162,26 +162,45 @@ async function clearAll() {
         bookedSlots.next = {};
         
         // Permite que o usuário defina as novas datas
-        const currentDateInput = prompt('Digite a data do Dia Corrente (formato: MM-DD-YYYY):');
-        const nextDateInput = prompt('Digite a data do Dia Seguinte (formato: MM-DD-YYYY):');
+        const currentDateInput = prompt('Digite a nova data do Dia Corrente (formato: MM-DD-YYYY):');
+        const nextDateInput = prompt('Digite a nova data do Dia Seguinte (formato: MM-DD-YYYY):');
 
         if (currentDateInput && nextDateInput) {
-            INITIAL_CURRENT_DATE = new Date(currentDateInput);
-            INITIAL_NEXT_DATE = new Date(nextDateInput);
+            const updatedCurrentDate = new Date(currentDateInput);
+            const updatedNextDate = new Date(nextDateInput);
 
-            // Salva as datas no localStorage
-            localStorage.setItem('INITIAL_CURRENT_DATE', INITIAL_CURRENT_DATE.toISOString());
-            localStorage.setItem('INITIAL_NEXT_DATE', INITIAL_NEXT_DATE.toISOString());
+            // Envia as datas para o servidor
+            fetch('/updateDates', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    currentDate: updatedCurrentDate.toISOString(),
+                    nextDate: updatedNextDate.toISOString()
+                })
+            }).then(response => {
+                if (response.ok) {
+                    INITIAL_CURRENT_DATE = updatedCurrentDate;
+                    INITIAL_NEXT_DATE = updatedNextDate;
 
-            // Atualiza os elementos da interface com as novas datas
-            setInitialDates();
+                    // Atualiza os elementos da interface com as novas datas
+                    setInitialDates();
+
+                    // Atualiza os horários e a lista de espera sem limpar os dados
+                    renderTimeSlots('current');
+                    renderTimeSlots('next');
+                    updateWaitlist('current');
+                    updateWaitlist('next');
+
+                    alert('Datas atualizadas com sucesso!');
+                } else {
+                    alert('Erro ao atualizar as datas no servidor.');
+                }
+            });
+        } else {
+            alert('Atualização de datas cancelada.');
         }
-
-        renderTimeSlots('current');
-        renderTimeSlots('next');
-        
-        updateWaitlist('current');
-        updateWaitlist('next');
 
         // Atualiza as datas para o dia corrente e o próximo dia ao limpar os horários
         //setDates();
@@ -246,6 +265,51 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+document.addEventListener('keydown', function(event) {
+    if (event.ctrlKey && event.shiftKey && event.key === 'U') { // Ctrl + Shift + U
+        const currentDateInput = prompt('Digite a nova data do Dia Corrente (formato: MM-DD-YYYY):');
+        const nextDateInput = prompt('Digite a nova data do Dia Seguinte (formato: MM-DD-YYYY):');
+
+        if (currentDateInput && nextDateInput) {
+            const updatedCurrentDate = new Date(currentDateInput);
+            const updatedNextDate = new Date(nextDateInput);
+
+            // Envia as datas para o servidor
+            fetch('/updateDates', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    currentDate: updatedCurrentDate.toISOString(),
+                    nextDate: updatedNextDate.toISOString()
+                })
+            }).then(response => {
+                if (response.ok) {
+                    INITIAL_CURRENT_DATE = updatedCurrentDate;
+                    INITIAL_NEXT_DATE = updatedNextDate;
+
+                    // Atualiza os elementos da interface com as novas datas
+                    setInitialDates();
+
+                    // Atualiza os horários e a lista de espera sem limpar os dados
+                    renderTimeSlots('current');
+                    renderTimeSlots('next');
+                    updateWaitlist('current');
+                    updateWaitlist('next');
+
+                    alert('Datas atualizadas com sucesso!');
+                } else {
+                    alert('Erro ao atualizar as datas no servidor.');
+                }
+            });
+        } else {
+            alert('Atualização de datas cancelada.');
+        }
+    }
+});
+
+
 function checkForUpcomingMassages() {
     const now = new Date();
     const currentDateString = INITIAL_CURRENT_DATE.toDateString();
@@ -283,7 +347,7 @@ function startNotificationChecker() {
     }, 60000);
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+/*document.addEventListener('DOMContentLoaded', () => {
     // Carrega as datas do localStorage, se disponíveis
     const savedCurrentDate = localStorage.getItem('INITIAL_CURRENT_DATE');
     const savedNextDate = localStorage.getItem('INITIAL_NEXT_DATE');
@@ -301,4 +365,49 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchBookings();
     startAutoRefresh();
     startNotificationChecker();
+});*/
+
+function initializeApp() {
+    setInitialDates();
+    showTab('current'); // Mostra a aba do dia corrente por padrão
+    fetchBookings();
+    startAutoRefresh();
+    startNotificationChecker();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    // Busca as datas do servidor
+    fetch('/getDates')
+        .then(response => response.json())
+        .then(data => {
+            if (data.currentDate && data.nextDate) {
+                INITIAL_CURRENT_DATE = new Date(data.currentDate);
+                INITIAL_NEXT_DATE = new Date(data.nextDate);
+            } else {
+                // Fallback para a data atual caso o servidor não retorne as datas
+                INITIAL_CURRENT_DATE = new Date();
+                INITIAL_NEXT_DATE = new Date();
+                INITIAL_NEXT_DATE.setDate(INITIAL_CURRENT_DATE.getDate() + 1);
+            }
+
+            initializeApp();
+        })
+        .catch(error => {
+            console.error('Erro ao buscar as datas do servidor:', error);
+
+            // Fallback para o localStorage caso o servidor não esteja acessível
+            const savedCurrentDate = localStorage.getItem('INITIAL_CURRENT_DATE');
+            const savedNextDate = localStorage.getItem('INITIAL_NEXT_DATE');
+
+            if (savedCurrentDate && savedNextDate) {
+                INITIAL_CURRENT_DATE = new Date(savedCurrentDate);
+                INITIAL_NEXT_DATE = new Date(savedNextDate);
+            } else {
+                INITIAL_CURRENT_DATE = new Date();
+                INITIAL_NEXT_DATE = new Date();
+                INITIAL_NEXT_DATE.setDate(INITIAL_CURRENT_DATE.getDate() + 1);
+            }
+
+            initializeApp();
+        });
 });

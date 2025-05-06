@@ -60,7 +60,7 @@ app.get('/', (req, res) => {
                     <h3 id="current-date">Dia Corrente</h3>
                     <div id="time-slots-current"></div>
                     <div id="waitlist-current">
-                        <h3>Lista</h3>
+                        <h3></h3>
                         <!-- Itens da lista de espera serão adicionados aqui pelo JavaScript -->
                     </div>
                 </div>
@@ -89,4 +89,26 @@ app.get('/', (req, res) => {
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
+});
+
+let currentDate = new Date().toISOString();
+let nextDate = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString();
+
+app.post('/updateDates', (req, res) => {
+    const { currentDate: newCurrentDate, nextDate: newNextDate } = req.body;
+
+    if (newCurrentDate && newNextDate) {
+        currentDate = newCurrentDate;
+        nextDate = newNextDate;
+        res.status(200).send('Datas atualizadas com sucesso.');
+    } else {
+        res.status(400).send('Dados inválidos.');
+    }
+});
+
+app.get('/getDates', (req, res) => {
+    res.json({
+        currentDate,
+        nextDate
+    });
 });
