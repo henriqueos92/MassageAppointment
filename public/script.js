@@ -36,7 +36,7 @@ function setInitialDates() {
     document.getElementById('next-date').innerText = `${formatDate(nextDate)}`;
 }*/
 
-async function bookSlot(slot, day) {
+/*async function bookSlot(slot, day) {
     let name = prompt('Digite seu nome:');
     if (name) {
         // Formata o nome: primeira letra maiúscula, restante minúscula
@@ -57,6 +57,67 @@ async function bookSlot(slot, day) {
             alert('Horário já reservado');
         }
     }
+}*/
+
+async function bookSlot(slot, day) {
+    // Exibe o modal
+    const modal = document.getElementById('nameModal');
+    const closeModal = document.getElementById('closeModal');
+    const submitName = document.getElementById('submitName');
+    const nameInput = document.getElementById('pnameInput');
+
+    // Limpa o campo de entrada antes de abrir o modal
+    nameInput.value = '';
+    
+    modal.style.display = 'block';
+
+    // Fecha o modal ao clicar no "X"
+    closeModal.onclick = () => {
+        modal.style.display = 'none';
+    };
+
+    // Fecha o modal ao clicar fora dele
+    window.onclick = (event) => {
+        if (event.target === modal) {
+            modal.style.display = 'none';
+        }
+    };
+
+    // Aguarda o clique no botão "Confirmar"
+    submitName.onclick = async () => {
+        const name = nameInput.value.trim();
+
+        if (name) {
+            // Fecha o modal
+            modal.style.display = 'none';
+
+            // Formata o nome: primeira letra maiúscula, restante minúscula
+            const formattedName = name
+                .toLowerCase()
+                .split(' ')
+                .map((word) => word.replace(/^\w/, (c) => c.toUpperCase()))
+                .join(' ');
+
+            // Envia a reserva para o servidor
+            const response = await fetch('/bookings', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ slot, name: formattedName, day }),
+            });
+
+            if (response.ok) {
+                bookedSlots[day][slot] = formattedName;
+                renderTimeSlots(day);
+                updateWaitlist(day);
+            } else {
+                alert('Horário já reservado');
+            }
+        } else {
+            alert('Por favor, insira seu nome.');
+        }
+    };
 }
 
 async function fetchBookings() {
