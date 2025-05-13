@@ -48,12 +48,34 @@
         </div>
     </div>
 
+    <!-- Modal para informar o nome -->
     <div id="nameModal" class="modal" style="display: none;">
         <div class="modal-content">
             <span class="close" id="closeModal">&times;</span>
             <h3>Digite seu nome</h3>
+            <p id="selectedTime">Você selecionou: </p>
             <input type="text" id="pnameInput" placeholder="Seu nome" />
             <button id="submitName">Confirmar</button>
+        </div>
+    </div>
+    <!-- Modal para mostrar mensagens -->
+    <div id="alertModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" id="closeAlertModal">&times;</span>
+            <h3 id="alertMessage">Mensagem</h3>
+            <button id="alertOkButton">OK</button>
+        </div>
+    </div>
+    <!-- Modal para coletar as datas do dia da massagem -->
+    <div id="dateModal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" id="closeDateModal">&times;</span>
+            <h3>Atualizar Datas</h3>
+            <label for="currentDateInput">Data do Dia Corrente:</label>
+            <input type="date" id="currentDateInput" />
+            <label for="nextDateInput">Data do Dia Seguinte:</label>
+            <input type="date" id="nextDateInput" />
+            <button id="submitDate">Confirmar</button>
         </div>
     </div>
 

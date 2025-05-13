@@ -65,11 +65,13 @@ async function bookSlot(slot, day) {
     const closeModal = document.getElementById('closeModal');
     const submitName = document.getElementById('submitName');
     const nameInput = document.getElementById('pnameInput');
+    const selectedTime = document.getElementById('selectedTime');
 
     // Limpa o campo de entrada antes de abrir o modal
     nameInput.value = '';
-    
-    modal.style.display = 'block';
+    selectedTime.innerText = `Você selecionou: ${slot}`;
+
+    modal.style.display = 'flex';
 
     // Fecha o modal ao clicar no "X"
     closeModal.onclick = () => {
@@ -112,10 +114,12 @@ async function bookSlot(slot, day) {
                 renderTimeSlots(day);
                 updateWaitlist(day);
             } else {
-                alert('Horário já reservado');
+                //alert('Horário já reservado');
+                showAlert('Horário já reservado');
             }
         } else {
-            alert('Por favor, insira seu nome.');
+            //alert('Por favor, insira seu nome.');
+            showAlert('Por favor, insira seu nome.');
         }
     };
 }
@@ -210,7 +214,35 @@ function printWaitlist() {
     printWindow.print();
 }
 
-async function clearAll() {
+function showAlert(message) {
+    const alertModal = document.getElementById('alertModal');
+    const alertMessage = document.getElementById('alertMessage');
+    const closeAlertModal = document.getElementById('closeAlertModal');
+    const alertOkButton = document.getElementById('alertOkButton');
+
+    // Define a mensagem no modal
+    alertMessage.innerText = message;
+
+    // Exibe o modal
+    alertModal.style.display = 'flex';
+
+    // Fecha o modal ao clicar no botão "OK" ou no "X"
+    const closeModal = () => {
+        alertModal.style.display = 'none';
+    };
+
+    closeAlertModal.onclick = closeModal;
+    alertOkButton.onclick = closeModal;
+
+    // Fecha o modal ao clicar fora dele
+    window.onclick = (event) => {
+        if (event.target === alertModal) {
+            closeModal();
+        }
+    };
+}
+
+/*async function clearAll() {
     const response = await fetch('/clearBookings', {
         method: 'POST',
         headers: {
@@ -254,21 +286,109 @@ async function clearAll() {
                     updateWaitlist('current');
                     updateWaitlist('next');
 
-                    alert('Datas atualizadas com sucesso!');
+                    //alert('Datas atualizadas com sucesso!');
+                    showAlert('Datas atualizadas com sucesso!');
                 } else {
-                    alert('Erro ao atualizar as datas no servidor.');
+                    //alert('Erro ao atualizar as datas no servidor.');
+                    showAlert('Erro ao atualizar as datas no servidor.');
                 }
             });
         } else {
-            alert('Atualização de datas cancelada.');
+            //alert('Atualização de datas cancelada.');
+            showAlert('Atualização de datas cancelada.');
         }
 
         // Atualiza as datas para o dia corrente e o próximo dia ao limpar os horários
         //setDates();
         
-        alert('Horários e listas foram limpos.');
+        //alert('Horários e listas foram limpos.');
+        showAlert('Horários e listas foram limpos.');
     } else {
-        alert('Erro ao limpar os horários e a listas.');
+        //alert('Erro ao limpar os horários e a listas.');
+        showAlert('Erro ao limpar os horários e as listas.');
+    }
+}*/
+async function clearAll() {
+    const response = await fetch('/clearBookings', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    });
+
+    if (response.ok) {
+        bookedSlots.current = {};
+        bookedSlots.next = {};
+
+        // Exibe o modal para coletar as novas datas
+        const modal = document.getElementById('dateModal');
+        const closeModal = document.getElementById('closeDateModal');
+        const submitDate = document.getElementById('submitDate');
+        const currentDateInput = document.getElementById('currentDateInput');
+        const nextDateInput = document.getElementById('nextDateInput');
+
+        // Limpa os campos de entrada
+        currentDateInput.value = '';
+        nextDateInput.value = '';
+
+        modal.style.display = 'flex';
+
+        // Fecha o modal ao clicar no "X"
+        closeModal.onclick = () => {
+            modal.style.display = 'none';
+        };
+
+        // Fecha o modal ao clicar fora dele
+        window.onclick = (event) => {
+            if (event.target === modal) {
+                modal.style.display = 'none';
+            }
+        };
+
+        // Aguarda o clique no botão "Confirmar"
+        submitDate.onclick = () => {
+            const currentDateValue = currentDateInput.value;
+            const nextDateValue = nextDateInput.value;
+
+            if (currentDateValue && nextDateValue) {
+                const updatedCurrentDate = new Date(`${currentDateValue}T00:00:00`);
+                const updatedNextDate = new Date(`${nextDateValue}T00:00:00`);
+
+                // Envia as datas para o servidor
+                fetch('/updateDates', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        currentDate: updatedCurrentDate.toISOString(),
+                        nextDate: updatedNextDate.toISOString()
+                    })
+                }).then(response => {
+                    if (response.ok) {
+                        INITIAL_CURRENT_DATE = updatedCurrentDate;
+                        INITIAL_NEXT_DATE = updatedNextDate;
+
+                        // Atualiza os elementos da interface com as novas datas
+                        setInitialDates();
+                        renderTimeSlots('current');
+                        renderTimeSlots('next');
+                        updateWaitlist('current');
+                        updateWaitlist('next');
+
+                        showAlert('Datas atualizadas com sucesso!');
+                    } else {
+                        showAlert('Erro ao atualizar as datas no servidor.');
+                    }
+                });
+
+                modal.style.display = 'none'; // Fecha o modal
+            } else {
+                showAlert('Por favor, preencha ambas as datas.');
+            }
+        };
+    } else {
+        showAlert('Erro ao limpar os horários e as listas.');
     }
 }
 
@@ -278,7 +398,7 @@ function openPasswordModal() {
     const submitBtn = document.getElementById('passwordSubmit');
     const passwordInput = document.getElementById('passwordInput');
 
-    modal.style.display = 'block';
+    modal.style.display = 'flex';
     passwordInput.focus();
 
     closeBtn.onclick = function() {
@@ -298,11 +418,12 @@ function openPasswordModal() {
             clearAll();
             modal.style.display = 'none';
         } else {
-            alert('Senha incorreta.');
+            //alert('Senha incorreta.');
+            showAlert('Senha incorreta.');
         }
     }
 
-    passwordInput.addEventListener('keydown', function(event) {
+    modal.addEventListener('keydown', function(event) {
         if (event.key === 'Enter') {
             submitBtn.onclick();
         }
@@ -359,13 +480,16 @@ document.addEventListener('keydown', function(event) {
                     updateWaitlist('current');
                     updateWaitlist('next');
 
-                    alert('Datas atualizadas com sucesso!');
+                    //alert('Datas atualizadas com sucesso!');
+                    showAlert('Datas atualizadas com sucesso!');
                 } else {
-                    alert('Erro ao atualizar as datas no servidor.');
+                    //alert('Erro ao atualizar as datas no servidor.');
+                    showAlert('Erro ao atualizar as datas no servidor.');
                 }
             });
         } else {
-            alert('Atualização de datas cancelada.');
+            //alert('Atualização de datas cancelada.');
+            showAlert('Atualização de datas cancelada.');
         }
     }
 });
