@@ -1,9 +1,18 @@
 const express = require('express');
 const path = require('path');
 const app = express();
-const port = 3000;
+//const port = 3002;
+const fs = require('fs');
+const dotenv = require('dotenv');
 
-require('dotenv').config();
+const isDev = fs.existsSync('.env.dev');
+
+// Carrega o arquivo de ambiente correto
+dotenv.config({ path: isDev ? '.env.dev' : '.env' });
+const port = process.env.PORT || 3000; // usa a variável do .env, ou padrão 3000
+
+
+//require('dotenv').config();
 
 let bookings = {
     current: {},
