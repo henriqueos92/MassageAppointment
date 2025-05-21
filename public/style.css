@@ -16,7 +16,9 @@ body {
 }
 
 header {
-    background: linear-gradient(90deg, #f40032, #7900b1, #8600a9);
+    /*background: linear-gradient(90deg, #f40032, #7900b1, #8600a9);*/
+    background: linear-gradient(linear, left top, right top, color-stop(0, #f40032), color-stop(14%, #7900b1), color-stop(26%, #7900b1), color-stop(40%, #8600a9));
+    background: linear-gradient(90deg, #f40032 0, #7900b1 14%, #7900b1 26%, #8600a9 40%);
     color: white;
     padding: 5px;
     text-align: center;
@@ -371,5 +373,46 @@ h1 {
         position: static; /* Remove a posição fixa */
         padding: 10px;
     }
+}
+
+.menu-container {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+.menu-icon {
+    font-size: 28px;
+    cursor: pointer;
+    padding: 8px 12px;
+    user-select: none;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 15px;
+    background: #fff;
+    min-width: 200px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 100;
+    border-radius: 6px;
+    margin-top: 5px;
+}
+
+.dropdown-menu button {
+    width: 95%;
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.dropdown-menu button:hover {
+    background: #ba68c88a;
+    padding: 10px 20px;
+    border-radius: 6px;
 }
 

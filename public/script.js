@@ -12,7 +12,7 @@ const bookedSlots = {
 function formatDate(date) {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return date.toLocaleDateString('pt-BR', options);
-}
+};
 
 let INITIAL_CURRENT_DATE = new Date();
 let INITIAL_NEXT_DATE = new Date();
@@ -23,7 +23,7 @@ function setInitialDates() {
     document.getElementById('next-date-button').innerText = `${formatDate(INITIAL_NEXT_DATE)}`;
     document.getElementById('current-date').innerText = `${formatDate(INITIAL_CURRENT_DATE)}`;
     document.getElementById('next-date').innerText = `${formatDate(INITIAL_NEXT_DATE)}`;
-}
+};
 
 /*function setDates() {
     const currentDate = new Date();
@@ -122,7 +122,7 @@ async function bookSlot(slot, day) {
             showAlert('Por favor, insira seu nome.');
         }
     };
-}
+};
 
 async function fetchBookings() {
     const response = await fetch('/bookings');
@@ -133,7 +133,7 @@ async function fetchBookings() {
     renderTimeSlots('next');
     updateWaitlist('current');
     updateWaitlist('next');
-}
+};
 
 function renderTimeSlots(day) {
     const container = document.getElementById(`time-slots-${day}`);
@@ -145,7 +145,7 @@ function renderTimeSlots(day) {
         button.onclick = () => bookSlot(slot, day);
         container.appendChild(button);
     });
-}
+};
 
 function updateWaitlist(day) {
     const container = document.getElementById(`waitlist-${day}`);
@@ -166,20 +166,20 @@ function updateWaitlist(day) {
         div.innerHTML = `<input type="checkbox" checked disabled> ${slot} - ${bookedSlots[day][slot]}`;
         container.appendChild(div);
     });
-}
+};
 
 function startAutoRefresh(interval = 1000) {
     setInterval(() => {
         fetchBookings();
     }, interval);
-}
+};
 
 function showTab(day) {
     document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
     document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
     document.getElementById(`tab-${day}`).classList.add('active');
     document.querySelector(`.tab-button[onclick="showTab('${day}')"]`).classList.add('active');
-}
+};
 
 function printWaitlist() {
     const currentWaitlist = document.getElementById('waitlist-current').innerHTML;
@@ -212,7 +212,7 @@ function printWaitlist() {
     printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.print();
-}
+};
 
 function showAlert(message) {
     const alertModal = document.getElementById('alertModal');
@@ -240,7 +240,7 @@ function showAlert(message) {
             closeModal();
         }
     };
-}
+};
 
 /*async function clearAll() {
     const response = await fetch('/clearBookings', {
@@ -390,7 +390,7 @@ async function clearAll() {
     } else {
         showAlert('Erro ao limpar os horários e as listas.');
     }
-}
+};
 
 function openPasswordModal() {
     const modal = document.getElementById('passwordModal');
@@ -428,18 +428,7 @@ function openPasswordModal() {
             submitBtn.onclick();
         }
     });
-}
-
-/*document.addEventListener('keydown', function(event) {
-    if (event.ctrlKey && event.shiftKey && event.key === 'L') {
-        const password = prompt('Digite a senha:');
-        if (password === clearPassword) {
-            clearAll();
-        } else {
-            alert('Senha incorreta.');
-        }
-    }
-});*/
+};
 
 document.addEventListener('keydown', function(event) {
     if (event.ctrlKey && event.shiftKey && event.key === 'L') {
@@ -494,6 +483,49 @@ document.addEventListener('keydown', function(event) {
     }
 });
 
+function toggleMenu() {
+    const menu = document.getElementById('dropdownMenu');
+    menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
+}
+
+// Fecha o menu se clicar fora dele
+document.addEventListener('click', function(event) {
+    const menu = document.getElementById('dropdownMenu');
+    const icon = document.querySelector('.menu-icon');
+    if (menu && icon && !menu.contains(event.target) && !icon.contains(event.target)) {
+        menu.style.display = 'none';
+    }
+});
+
+let blinkTitleInterval = null;
+let blinkTitleTimeout = null;
+
+function blinkTitle(message, duration = 60000) {
+    const originalTitle = document.title;
+
+    // Se já estiver piscando, limpa o anterior
+    if (blinkTitleInterval) {
+        clearInterval(blinkTitleInterval);
+        blinkTitleInterval = null;
+    }
+    if (blinkTitleTimeout) {
+        clearTimeout(blinkTitleTimeout);
+        blinkTitleTimeout = null;
+    }
+
+    let visible = false;
+    blinkTitleInterval = setInterval(() => {
+        document.title = visible ? message : originalTitle;
+        visible = !visible;
+    }, 800);
+
+    blinkTitleTimeout = setTimeout(() => {
+        clearInterval(blinkTitleInterval);
+        document.title = originalTitle;
+        blinkTitleInterval = null;
+        blinkTitleTimeout = null;
+    }, duration);
+};
 
 function checkForUpcomingMassages() {
     const now = new Date();
@@ -515,7 +547,8 @@ function checkForUpcomingMassages() {
 
                 if (timeDifference > 0 && timeDifference <= 2) {
                     const name = slots[slot];
-                    alert(`Sua massagem está próxima, ${name}!\nHorário: ${slot} (Dia: ${formatDate(new Date(date))})`);
+                    blinkTitle(`⏰ Mensagem para ${name}!`);
+                    showAlert(`Sua massagem está próxima, ${name}!\nHorário: ${slot} (Dia: ${formatDate(new Date(date))})`);
                 }
             });
         }
