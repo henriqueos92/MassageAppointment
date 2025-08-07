@@ -1,0 +1,521 @@
+html, body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+header {
+    /*background: linear-gradient(90deg, #f40032, #7900b1, #8600a9);*/
+    background: linear-gradient(linear, left top, right top, color-stop(0, #f40032), color-stop(14%, #7900b1), color-stop(26%, #7900b1), color-stop(40%, #8600a9));
+    background: linear-gradient(90deg, #f40032 0, #7900b1 14%, #7900b1 26%, #8600a9 40%);
+    color: white;
+    padding: 5px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+}
+
+.white-background {
+    background-color: white; /* Define o fundo branco */
+    padding: 20px; /* Adiciona espaçamento interno */
+    border-radius: 8px; /* Adiciona cantos arredondados */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra */
+    margin: 20px auto; /* Centraliza o conteúdo horizontalmente */
+    max-width: 800px; /* Define uma largura máxima */
+}
+
+.tab-buttons {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.tab-button {
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+}
+
+.tab-button:hover {
+    background-color: #f0f0f0;
+}
+
+.tab-button.active {
+    background-color: #d3d3d3;
+    color: #808080;
+    border: 2px solid #808080;
+}
+
+.tab-content {
+    display: none;
+    width: 800px;
+    margin: 20px auto 0;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+#time-slots {
+    width: 800px;
+    margin: 20px auto 0;
+}
+
+button {
+    background-color: white;
+    color: black;
+    border: 2px solid black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 5px;
+    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+button:hover {
+    background-color: #f0f0f0;
+}
+
+button:disabled {
+    background-color: #d3d3d3;
+    color: #808080;
+    border: 2px solid #808080;
+    cursor: not-allowed;
+}
+
+#waitlist {
+    margin: 20px auto;
+    width: 760px;
+}
+
+.waitlist-item {
+    display: flex;
+    align-items: center;
+    margin: 5px 0;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-decoration: underline;
+}
+
+.waitlist-item input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.footer {
+    text-align: center;
+    background-color: #f0f0f0;
+    color: #aaaaaa;
+    width: 100%;
+    bottom: 0;
+    flex-shrink: 0; 
+    user-select: none;
+}
+
+.print-button-container {
+    position: absolute;
+    top: 22px;
+    right: 20px;
+}
+
+.print-button {
+    background-color: #8600a9;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.print-button:hover {
+    background-color: #7900b1;
+}
+
+.rodape {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    background-color: #f0f0f0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 10px 0;
+}
+
+h1 { 
+    user-select: none;
+}
+/*
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 1; 
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4); 
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 15px;
+    border-radius: 12px;
+    border: 1px solid #888;
+    width: 20%; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.modal-content input {
+    width: 80%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.modal-content button {
+    background-color: #7900b1;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-content button:hover {
+    background-color: #8600a9;
+}
+*/
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(6px);
+    overflow: auto; 
+    background-color: rgba(0, 0, 0, 0.4);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: rgba(255, 255, 255, 0.932);
+    border-radius: 16px;
+    padding: 30px 25px;
+    width: 300px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    color: #000000;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+}
+
+.modal-content h3 {
+    margin-bottom: 10px;
+    font-size: 18px;
+}
+
+#editNameModal select,
+#editNameModal input,
+.modal-content input {
+    width: 90%;
+    padding: 10px;
+    margin: 15px 0;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #000000ab;
+}
+
+.modal-content input::placeholder {
+    color: #0000005b;
+}
+
+.modal-content button {
+    background-color: #9c27b0;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-content button:hover {
+    background-color: #ba68c8;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+}
+
+#passwordInput {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+}
+
+#passwordSubmit {
+    display: block;
+    margin: 20px auto; /* Centraliza o botão */
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+@media (max-width: 768px) {
+    body {
+        padding: 0px;
+    }
+
+    .container {
+        padding: 10px;
+    }
+
+    .tab-buttons {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .tab-button {
+        width: 100%; /* Botões ocupam toda a largura */
+        font-size: 14px; /* Reduz o tamanho da fonte */
+    }
+
+    .tab-content {
+        width: 100%; /* Ajusta a largura do conteúdo */
+        margin: 10px 0; /* Reduz a margem */
+    }
+
+    #time-slots {
+        width: 100%; /* Ajusta a largura dos slots */
+    }
+
+    .modal-content {
+        width: 90%; /* Ajusta a largura do modal em telas menores */
+    }
+
+    .print-button-container {
+        position: static; /* Remove a posição fixa */
+        text-align: center; /* Centraliza o botão */
+        margin-top: 10px;
+    }
+
+    .waitlist-item {
+        align-items: flex-start;
+    }
+
+    .rodape {
+        position: static; /* Remove a posição fixa */
+        padding: 10px;
+    }
+}
+
+.menu-container {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+}
+
+.menu-icon {
+    font-size: 28px;
+    cursor: pointer;
+    padding: 8px 12px;
+    user-select: none;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    right: 15px;
+    background: #fff;
+    min-width: 200px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    z-index: 100;
+    border-radius: 6px;
+    margin-top: 5px;
+}
+
+.dropdown-menu button {
+    width: 95%;
+    padding: 10px 20px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.dropdown-menu button:hover {
+    background: #ba68c88a;
+    padding: 10px 20px;
+    border-radius: 6px;
+}
+
+/* Adicione ao seu style.css */
+
+#editNameModal {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(8px) saturate(180%);
+    background-color: rgba(0, 0, 0, 0.18);
+    align-items: center;
+    justify-content: center;
+}
+
+#editNameModal .modal-content {
+    background: white;
+    border-radius: 24px;
+    box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
+    backdrop-filter: blur(16px) saturate(180%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%);
+    border: 1.5px solid rgba(0,0,0,0.08);
+    color: #222;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+    padding: 32px 24px;
+    width: 340px;
+}
+
+#alertModal {
+    z-index: 1000;
+}
+
+#editNameModal .modal-content label,
+#editNameModal .modal-content select,
+#editNameModal .modal-content input {
+    text-align: left;
+    display: block;
+    margin-left: 0;
+}
+
+#editNameModal label {
+    display: block;
+    margin: 12px 0 4px 0;
+    font-weight: 600;
+    color: #222;
+    text-align: left;
+}
+
+#nameModal .close,
+#alertModal .close,
+#dateModal .close,
+#passwordModal .close,
+#editNameModal .close {
+    color: #7900b1;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin-top: -12px;
+    margin-right: -8px;
+}
+
+#nameModal     .close:hover,
+#nameModal     .close:focus,
+#alertModal    .close:hover,
+#alertModal    .close:focus,
+#dateModal     .close:hover,
+#dateModal     .close:focus,
+#passwordModal .close:hover,
+#passwordModal .close:focus,
+#editNameModal .close:hover,
+#editNameModal .close:focus {
+    color: #f40032;
+    text-decoration: none;
+}
+
+#editNameModal button {
+    background: rgba(255,255,255,0.45);
+    border: 1.5px solid rgba(0,0,0,0.10);
+    color: #222;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px 0 rgba(0,0,0,0.06);
+    backdrop-filter: blur(8px) saturate(180%);
+    -webkit-backdrop-filter: blur(8px) saturate(180%);
+    font-weight: 600;
+    font-size: 16px;
+    padding: 12px 28px;
+    margin: 8px 4px;
+    cursor: pointer;
+    transition: background 0.3s, box-shadow 0.3s, color 0.3s;
+    outline: none;
+}
+
+#editNameModal button:hover {
+    background: rgba(186, 104, 200, 0.18);
+    color: #7900b1;
+}
+

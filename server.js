@@ -11,9 +11,6 @@ const isDev = fs.existsSync('.env.dev');
 dotenv.config({ path: isDev ? '.env.dev' : '.env' });
 const port = process.env.PORT || 3000; // usa a variável do .env, ou padrão 3000
 
-
-//require('dotenv').config();
-
 let bookings = {
     current: {},
     next: {}
@@ -112,6 +109,26 @@ app.post('/updateDates', (req, res) => {
         res.status(200).send('Datas atualizadas com sucesso.');
     } else {
         res.status(400).send('Dados inválidos.');
+    }
+});
+
+app.post('/validate-password', (req, res) => {
+    const { password } = req.body;
+    console.log('Recebido:', password, 'Esperado:', process.env.CLEAR_PASSWORD);
+    if (password === process.env.CLEAR_PASSWORD) {
+        res.json({ valid: true });
+    } else {
+        res.json({ valid: false });
+    }
+});
+
+app.put('/updateBookingName', (req, res) => {
+    const { day, slot, newName } = req.body;
+    if (bookings[day] && bookings[day][slot]) {
+        bookings[day][slot] = newName;
+        res.json({ success: true });
+    } else {
+        res.json({ success: false });
     }
 });
 

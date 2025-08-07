@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Agendamento de Massagem</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="frontend/style.css">
     <link rel="icon" href="gui/themes/img/favicon.ico" type="image/x-icon">
 </head>
 <body>
@@ -83,12 +83,37 @@
             <button id="submitDate">Confirmar</button>
         </div>
     </div>
-
+    <!-- Modal para editar o nome -->
+    <div id="editNameModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" onclick="document.getElementById('editNameModal').style.display='none'">&times;</span>
+            <h3>Alterar Nome Agendado</h3>
+            <label>Dia:</label>
+            <select id="editDaySelect"></select>
+            <label>Horário:</label>
+            <select id="editSlotSelect"></select>
+            <label>Novo Nome:</label>
+            <input type="text" id="editNameInput" />
+            <button id="editNameSubmit">Salvar</button>
+        </div>
+    </div>
+    <!-- Atualiza as datas -->
+    <div id="updateDatesModal" class="modal" style="display:none;">
+        <div class="modal-content">
+            <span class="close" id="closeUpdateDatesModal">&times;</span>
+            <h3>Atualizar Datas</h3>
+            <label>Dia Corrente:</label>
+            <input type="date" id="updateCurrentDateInput" />
+            <label>Dia Seguinte:</label>
+            <input type="date" id="updateNextDateInput" />
+            <button id="updateDatesSubmit">Salvar</button>
+        </div>
+    </div>
     <script>
         const clearPassword = "${process.env.CLEAR_PASSWORD}";
     </script>
     
-    <script src="script.js"></script>
+    <script src="backend/script.js"></script>
     <div class="rodape">
         <footer class="footer">
             Desenvolvido pela equipe de Q.A
