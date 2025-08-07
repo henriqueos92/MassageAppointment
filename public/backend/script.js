@@ -666,6 +666,11 @@ document.addEventListener('keydown', function(e) {
         e.preventDefault();
         return false;
     }
+    // ctrl + shift + c - DevTools
+    if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'c') {
+        e.preventDefault();
+        return false;
+    }
     // Ctrl+Shift+U - DevTools (Source)
     /*if (e.ctrlKey && e.shiftKey && e.key.toLowerCase() === 'u') {
         e.preventDefault();
