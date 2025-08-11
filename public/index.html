@@ -16,6 +16,7 @@
             </div>
             <div id="dropdownMenu" class="dropdown-menu">
                 <button onclick="printWaitlist()">Imprimir Lista</button>
+                <button onclick="openHistoryPasswordModal()">Histórico por Pessoa</button>
             </div>
         </div>
     </header>
@@ -107,6 +108,38 @@
             <label>Dia Seguinte:</label>
             <input type="date" id="updateNextDateInput" />
             <button id="updateDatesSubmit">Salvar</button>
+        </div>
+    </div>
+    <!-- Modal para Histórico por pessoa -->
+    <div id="historyModal" class="modal" style="display:none;">
+        <div class="modal-content-history">
+            <span class="close" id="closeHistoryModal">&times;</span>
+            <h3>Consultar Histórico</h3>
+            <div class="input-row">
+                <label>Nome:</label>
+                <select id="historyNameSelect"></select>
+                <label>Mês:</label>
+                <select id="monthSelect">
+                    <option value="Todos">Todos</option>
+                    <option value="01">Janeiro</option>
+                    <option value="02">Fevereiro</option>
+                    <option value="03">Março</option>
+                    <option value="04">Abril</option>
+                    <option value="05">Maio</option>
+                    <option value="06">Junho</option>
+                    <option value="07">Julho</option>
+                    <option value="08">Agosto</option>
+                    <option value="09">Setembro</option>
+                    <option value="10">Outubro</option>
+                    <option value="11">Novembro</option>
+                    <option value="12">Dezembro</option>
+                </select>
+                <button id="historySearchBtn">Buscar</button>
+                <button id="historyPrintBtn">Imprimir</button>
+            </div>
+            <div class="modal-scroll-content">
+                <div id="historyResult"></div>
+            </div>
         </div>
     </div>
     <script>

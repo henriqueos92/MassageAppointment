@@ -4,8 +4,25 @@ const app = express();
 //const port = 3002;
 const fs = require('fs');
 const dotenv = require('dotenv');
-
 const isDev = fs.existsSync('.env.dev');
+const HISTORY_FILE = path.join(__dirname, 'history.json');
+let currentDate = new Date().toISOString();
+let nextDate = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString();
+
+function readHistory() {
+    if (!fs.existsSync(HISTORY_FILE)) return [];
+    return JSON.parse(fs.readFileSync(HISTORY_FILE));
+}
+
+function writeHistory(history) {
+    fs.writeFileSync(HISTORY_FILE, JSON.stringify(history, null, 2));
+}
+
+function addToHistory(name, date, slot) {
+    const history = readHistory();
+    history.push({ name, date, slot });
+    writeHistory(history);
+}
 
 // Carrega o arquivo de ambiente correto
 dotenv.config({ path: isDev ? '.env.dev' : '.env' });
@@ -23,14 +40,55 @@ app.get('/bookings', (req, res) => {
     res.json(bookings);
 });
 
-app.post('/bookings', (req, res) => {
+/*app.post('/bookings', (req, res) => {
     const { slot, name, day } = req.body;
     if (!bookings[day][slot]) {
         bookings[day][slot] = name;
+        addToHistory(name, day, slot);
         res.status(201).send('Booking created');
     } else {
         res.status(400).send('Slot already booked');
     }
+});*/
+
+app.post('/bookings', (req, res) => {
+    const { slot, name, day } = req.body;
+
+    // Converta "current"/"next" para a data real
+    let realDate;
+    if (day === 'current') {
+        realDate = currentDate.slice(0, 10); // Exemplo: "2025-08-07"
+    } else if (day === 'next') {
+        realDate = nextDate.slice(0, 10);
+    } else {
+        realDate = day; // já é uma data real
+    }
+
+    if (!bookings[day][slot]) {
+        bookings[day][slot] = name;
+        addToHistory(name, realDate, slot); // Agora salva a data real!
+        res.status(201).send('Booking created');
+    } else {
+        res.status(400).send('Slot already booked');
+    }
+});
+
+app.get('/allNames', (req, res) => {
+    const history = readHistory();
+    const names = [...new Set(history.map(item => item.name))];
+    res.json(names);
+});
+
+app.get('/history/:name', (req, res) => {
+    const history = readHistory();
+    const name = decodeURIComponent(req.params.name);
+    const personHistory = history.filter(item => item.name === name);
+    res.json(personHistory);
+});
+
+app.get('/historyAll', (req, res) => {
+    const history = readHistory();
+    res.json(history);
 });
 
 app.post('/clearBookings', (req, res) => {
@@ -97,8 +155,7 @@ app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
-let currentDate = new Date().toISOString();
-let nextDate = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString();
+
 
 app.post('/updateDates', (req, res) => {
     const { currentDate: newCurrentDate, nextDate: newNextDate } = req.body;

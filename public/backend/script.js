@@ -93,7 +93,6 @@ async function bookSlot(slot, day) {
                 renderTimeSlots(day);
                 updateWaitlist(day);
             } else {
-                //alert('Horário já reservado');
                 showAlert('Horário já reservado');
             }
         } else {
@@ -205,6 +204,31 @@ function printWaitlist() {
     printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.print();
+};
+
+document.getElementById('historyPrintBtn').onclick = () => {
+    const resultDiv = document.getElementById('historyResult');
+    if (!resultDiv.innerHTML.trim()) {
+        showAlert('Não há dados para imprimir.');
+        return;
+    }
+
+    const printWindow = window.open('', '', 'height=600,width=800');
+    printWindow.document.write('<html><head><title>Relatório de Massagens</title>');
+    printWindow.document.write('<style>');
+    printWindow.document.write('table { width: 100%; border-collapse: collapse; }');
+    printWindow.document.write('th, td { border: 1px solid black; padding: 8px; text-align: left; }');
+    printWindow.document.write('th { background-color: #f0f0f0; }');
+    printWindow.document.write('</style>');
+    printWindow.document.write('</head><body>');
+    printWindow.document.write('<h2>Relatório de Massagens</h2>');
+    printWindow.document.write(resultDiv.innerHTML);
+    printWindow.document.write('</body></html>');
+
+    printWindow.document.close();
+    //printWindow.focus();
+    printWindow.print();
+    //printWindow.close();
 };
 
 //Exibe um modal de alerta com a mensagem informada e permite fechar o modal por botão ou clique fora.
@@ -648,6 +672,133 @@ document.addEventListener('contextmenu', function(e) {
     e.preventDefault();
     return false;
 });
+
+function openHistoryPasswordModal() {
+    //openPasswordModal(openHistoryModal);
+    openHistoryModal();
+}
+
+function openHistoryModal() {
+    const modal = document.getElementById('historyModal');
+    const closeBtn = document.getElementById('closeHistoryModal');
+    const nameSelect = document.getElementById('historyNameSelect');
+    const searchBtn = document.getElementById('historySearchBtn');
+    const resultDiv = document.getElementById('historyResult');
+
+    // Preencher a lista de nomes
+    fetch('/allNames')
+        .then(res => res.json())
+        .then(names => {
+            nameSelect.innerHTML = '';
+            
+            // Adicionar a opção "Todos"
+            const allOption = document.createElement('option');
+            allOption.value = 'Todos';
+            allOption.text = 'Todos';
+            nameSelect.appendChild(allOption);
+
+            // Adicionar os nomes
+            names.sort((a, b) => a.localeCompare(b)); // ordena em ordem crescente
+
+            names.forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.text = name;
+                nameSelect.appendChild(option);
+            });
+        });
+
+    modal.style.display = 'flex';
+    closeBtn.onclick = () => { modal.style.display = 'none'; };
+
+    searchBtn.onclick = () => {
+        const selectedName = nameSelect.value;
+        const selectedMonth = document.getElementById('monthSelect').value;
+        const url = selectedName === 'Todos' ? '/historyAll' : `/history/${encodeURIComponent(selectedName)}`;
+
+        fetch(url)
+            .then(res => res.json())
+            .then(history => {
+                if (!history.length) {
+                    resultDiv.innerHTML = 'Nenhum histórico encontrado.';
+                    return;
+                }
+
+                // Filtrar por mês, se selecionado diferente de "Todos"
+                let filteredHistory = history;
+                if (selectedMonth !== 'Todos') {
+                    filteredHistory = history.filter(item => {
+                        const month = item.date.split('-')[1]; // pega o mês da data
+                        return month === selectedMonth;
+                    });
+                }
+
+                if (!filteredHistory.length) {
+                    resultDiv.innerHTML = 'Nenhum histórico encontrado para o filtro selecionado.';
+                    return;
+                }
+
+                // Ordenar os dados
+                history.sort((a, b) => {
+                    const dateA = new Date(`${a.date}T${a.slot}`);
+                    const dateB = new Date(`${b.date}T${b.slot}`);
+                    return dateA - dateB;
+                });
+
+                // Agrupar os dados por nome e mês
+                const grouped = {};
+                filteredHistory.forEach(item => {
+                    const [year, month] = item.date.split('-');
+                    const key = `${month}/${year}`;
+                    if (!grouped[item.name]) grouped[item.name] = {};
+                    if (!grouped[item.name][key]) grouped[item.name][key] = [];
+                    grouped[item.name][key].push(formatDateTime(item.date, item.slot));
+                });
+
+                // Montar a lista de meses únicos
+                const allMonthsSet = new Set();
+                Object.values(grouped).forEach(monthData => {
+                    Object.keys(monthData).forEach(monthKey => allMonthsSet.add(monthKey));
+                });
+                const months = Array.from(allMonthsSet).sort((a, b) => {
+                    const [m1, y1] = a.split('/');
+                    const [m2, y2] = b.split('/');
+                    return new Date(`${y1}-${m1}-01`) - new Date(`${y2}-${m2}-01`);
+                });
+
+                // Montar a tabela
+                let table = '<table border="1" style="border-collapse: collapse; width: 100%; font-size: 13px;">';
+                table += `<tr><th>Nome</th>${months.map(m => `<th>${formatMonthYear(m)}</th>`).join('')}</tr>`;
+
+                // Ordenar os nomes antes de exibir
+                Object.keys(grouped).sort((a, b) => a.localeCompare(b)).forEach(name => {
+                    table += `<tr><td>${name}</td>`;
+                    months.forEach(month => {
+                        const values = grouped[name][month] || [];
+                        table += `<td>${values.join('<br>')}</td>`;
+                    });
+                    table += `</tr>`;
+                });
+
+                table += '</table>';
+                resultDiv.innerHTML = table;
+            });
+    };
+}
+
+
+// Função para formatar de "08/2025" para "Agosto/2025"
+function formatMonthYear(monthYear) {
+    const [month, year] = monthYear.split('/');
+    const monthsPt = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
+                      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    return `${monthsPt[parseInt(month) - 1]}/${year}`;
+}
+
+function formatDateTime(dateStr, timeStr) {
+    const [year, month, day] = dateStr.split('-');
+    return `${timeStr} - ${day}/${month}/${year}`;
+}
 
 // Bloquear atalhos para DevTools e outras funcionalidades
 document.addEventListener('keydown', function(e) {
