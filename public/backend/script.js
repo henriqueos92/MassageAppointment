@@ -542,6 +542,9 @@ function toggleMenu() {
     const menu = document.getElementById('dropdownMenu');
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
 }
+function closeMenu() {
+  document.getElementById('dropdownMenu').style.display = 'none';
+}
 
 // Fecha o menu se clicar fora dele
 document.addEventListener('click', function(event) {
