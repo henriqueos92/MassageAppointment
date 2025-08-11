@@ -208,7 +208,9 @@ function printWaitlist() {
 
 document.getElementById('historyPrintBtn').onclick = () => {
     const resultDiv = document.getElementById('historyResult');
-    if (!resultDiv.innerHTML.trim()) {
+    const content = resultDiv.innerText.trim();
+
+    if (!content || content === 'Nenhum histórico encontrado.') {
         showAlert('Não há dados para imprimir.');
         return;
     }
