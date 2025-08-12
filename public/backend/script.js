@@ -535,7 +535,7 @@ document.addEventListener('keydown', function(event) {
         openPasswordModal(openEditNameModal);
     }
     if (event.ctrlKey && event.shiftKey && event.key === 'U') { // Ctrl + Shift + U
-        openUpdateDatesModal();
+        openPasswordModal(openUpdateDatesModal);
     }
 });
 

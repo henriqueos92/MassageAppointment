@@ -234,7 +234,16 @@ h1 {
 }
 
 #editNameModal select,
-#editNameModal input,
+#editNameModal input {
+    width: 100%;
+    padding: 10px 0;
+    margin: 15px 0;
+    border: 1px solid rgba(0, 0, 0, 0.18);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.983);
+    color: #000000ab;
+}
+
 .modal-content input {
     width: 95%;
     padding: 10px 10px 10px 10px;

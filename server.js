@@ -179,13 +179,53 @@ app.post('/validate-password', (req, res) => {
     }
 });
 
-app.put('/updateBookingName', (req, res) => {
+/*app.put('/updateBookingName', (req, res) => {
     const { day, slot, newName } = req.body;
     if (bookings[day] && bookings[day][slot]) {
         bookings[day][slot] = newName;
         res.json({ success: true });
     } else {
         res.json({ success: false });
+    }
+});*/
+
+app.put('/updateBookingName', (req, res) => {
+    const { day, slot, newName } = req.body;
+
+    // Atualiza o agendamento em memória (bookings) usando a chave day recebida (ex: "current" ou "next")
+    if (bookings[day] && bookings[day][slot]) {
+        bookings[day][slot] = newName;
+
+        // Converter day para data real para usar no histórico
+        let realDate = day;
+        if (day === 'current') {
+            const today = new Date();
+            const yyyy = today.getFullYear();
+            const mm = String(today.getMonth() + 1).padStart(2, '0');
+            const dd = String(today.getDate()).padStart(2, '0');
+            realDate = `${yyyy}-${mm}-${dd}`;
+        } else if (day === 'next') {
+            const tomorrow = new Date();
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            const yyyy = tomorrow.getFullYear();
+            const mm = String(tomorrow.getMonth() + 1).padStart(2, '0');
+            const dd = String(tomorrow.getDate()).padStart(2, '0');
+            realDate = `${yyyy}-${mm}-${dd}`;
+        }
+
+        const history = readHistory();
+        const record = history.find(item => item.date === realDate && item.slot === slot);
+
+        if (record) {
+            record.name = newName;
+            writeHistory(history);
+        } else {
+            console.log('⚠️ Registro não encontrado no histórico para atualizar');
+        }
+
+        res.json({ success: true });
+    } else {
+        res.json({ success: false, message: 'Agendamento não encontrado' });
     }
 });
 
