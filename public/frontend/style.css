@@ -178,50 +178,6 @@ button:disabled {
 h1 { 
     user-select: none;
 }
-/*
-.modal {
-    display: none; 
-    position: fixed; 
-    z-index: 1; 
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto; 
-    background-color: rgba(0,0,0,0.4); 
-}
-
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 15px;
-    border-radius: 12px;
-    border: 1px solid #888;
-    width: 20%; 
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-}
-
-.modal-content input {
-    width: 80%;
-    padding: 10px;
-    margin: 10px 0;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-}
-
-.modal-content button {
-    background-color: #7900b1;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.modal-content button:hover {
-    background-color: #8600a9;
-}
-*/
 
 .modal {
     display: none;
@@ -241,14 +197,35 @@ h1 {
 .modal-content {
     background: rgba(255, 255, 255, 0.932);
     border-radius: 16px;
-    padding: 30px 25px;
-    width: 300px;
+    width: 40vh;
+    /*padding: 30px 25px;
+    border: 1px solid rgba(255, 255, 255, 0.18);*/
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
     color: #000000;
     font-family: 'Segoe UI', sans-serif;
     text-align: center;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #7900b1; /* cor da barra */
+    color: white;
+    padding: 10px 15px;
+    border-radius: 16px 16px 0 0; /* cantos arredondados em cima */
+    font-size: 16px;
+    font-weight: bold;
+}
+
+.modal-title {
+    margin: 0;
+}
+
+.modal-body {
+    padding: 20px 20px;
+    font-weight: 600;
 }
 
 .modal-content h3 {
@@ -259,12 +236,12 @@ h1 {
 #editNameModal select,
 #editNameModal input,
 .modal-content input {
-    width: 90%;
-    padding: 10px;
+    width: 95%;
+    padding: 10px 10px 10px 10px;
     margin: 15px 0;
     border: 1px solid rgba(0, 0, 0, 0.18);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.983);
     color: #000000ab;
 }
 
@@ -302,10 +279,10 @@ h1 {
 }*/
 
 #passwordInput {
-    width: 100%;
+    width: 300px;
     padding: 12px 20px;
     margin: 8px 0;
-    display: inline-block;
+    /*display: flex;*/
     border: 1px solid #ccc;
     box-sizing: border-box;
 }
@@ -420,8 +397,7 @@ h1 {
 
 /* Adicione ao seu style.css */
 
-#historyModal,
-#editNameModal {
+#historyModal {
     display: none;
     position: fixed;
     z-index: 10;
@@ -435,8 +411,7 @@ h1 {
     justify-content: center;
 }
 
-#historyModal .modal-content,
-#editNameModal .modal-content {
+#historyModal .modal-content{
     background: white;
     border-radius: 24px;
     box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
@@ -454,7 +429,6 @@ h1 {
     z-index: 1000;
 }
 
-#historyModal  .modal-content label,
 #editNameModal .modal-content label,
 #editNameModal .modal-content select,
 #editNameModal .modal-content input {
@@ -472,12 +446,7 @@ h1 {
     text-align: left;
 }
 
-#historyModal .close,
-#nameModal .close,
-#alertModal .close,
-#dateModal .close,
-#passwordModal .close,
-#editNameModal .close {
+.close {
     color: #7900b1;
     float: right;
     font-size: 28px;
@@ -488,18 +457,8 @@ h1 {
     margin-right: -8px;
 }
 
-#nameModal     .close:hover,
-#nameModal     .close:focus,
-#historyModal   .close:hover,
-#historyModal   .close:focus,
-#alertModal    .close:hover,
-#alertModal    .close:focus,
-#dateModal     .close:hover,
-#dateModal     .close:focus,
-#passwordModal .close:hover,
-#passwordModal .close:focus,
-#editNameModal .close:hover,
-#editNameModal .close:focus {
+.close:hover,
+.close:focus {
     color: #f40032;
     text-decoration: none;
 }
@@ -507,14 +466,14 @@ h1 {
 .modal-content-history {
     background: rgba(255, 255, 255, 0.932);
     border-radius: 16px;
-    padding: 30px 25px;
+    /*padding: 30px 25px;*/
     width: 90vw;
     max-width: 90%; /* limite máximo */
     max-height: 90%; /* altura máxima */
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.18);
+    /*border: 1px solid rgba(255, 255, 255, 0.18);*/
     color: #000000;
     font-family: 'Segoe UI', sans-serif;
     text-align: center;

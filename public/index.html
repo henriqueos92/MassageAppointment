@@ -47,98 +47,134 @@
     <!-- Modal para solicitar a senha -->
     <div id="passwordModal" class="modal">
         <div class="modal-content">
-            <span class="close">&times;</span>
-            <h3>Digite a senha:</h3>
-            <input type="password" id="passwordInput">
-            <button id="passwordSubmit">Enviar</button>
+             <div class="modal-header">
+                <span class="modal-title">Senha</span>
+                <span class="close">&times;</span>
+            </div>
+             <div class="modal-body">
+                 <label>Digite a senha:</label>
+                 <input type="password" id="passwordInput">
+                 <button id="passwordSubmit">Enviar</button>
+             </div>
         </div>
     </div>
 
-    <!-- Modal para informar o nome -->
     <div id="nameModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <span class="close" id="closeModal">&times;</span>
-            <h3>Digite seu nome</h3>
-            <p id="selectedTime">Você selecionou: </p>
-            <input type="text" id="pnameInput" placeholder="Seu nome" />
-            <button id="submitName">Confirmar</button>
+            <!-- Barra de título -->
+            <div class="modal-header">
+                <span class="modal-title">Informar o Nome</span>
+                <span class="close" id="closeModal">&times;</span>
+            </div>
+
+            <div class="modal-body">
+                <p id="selectedTime">Você selecionou: </p>
+                <input type="text" id="pnameInput" placeholder="Seu nome" />
+                <button id="submitName">Confirmar</button>
+            </div>
         </div>
     </div>
     <!-- Modal para mostrar mensagens -->
     <div id="alertModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <span class="close" id="closeAlertModal">&times;</span>
-            <h3 id="alertMessage">Mensagem</h3>
-            <button id="alertOkButton">OK</button>
+            <div class="modal-header">
+                <span class="modal-title">Aviso</span>
+                <span class="close" id="closeAlertModal">&times;</span>
+            </div>
+
+            <div class="modal-body">
+                <h3 id="alertMessage">Mensagem</h3>
+                <button id="alertOkButton">OK</button>
+            </div>
         </div>
     </div>
     <!-- Modal para coletar as datas do dia da massagem -->
     <div id="dateModal" class="modal" style="display: none;">
         <div class="modal-content">
-            <span class="close" id="closeDateModal">&times;</span>
-            <h3>Atualizar Datas</h3>
-            <label for="currentDateInput">Data do Dia Corrente:</label>
-            <input type="date" id="currentDateInput" />
-            <label for="nextDateInput">Data do Dia Seguinte:</label>
-            <input type="date" id="nextDateInput" />
-            <button id="submitDate">Confirmar</button>
+            <div class="modal-header">
+                <span class="modal-title">Atualizar Datas</span>
+                <span class="close" id="closeDateModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <label for="currentDateInput">Data do Dia Corrente:</label>
+                <input type="date" id="currentDateInput" />
+                <label for="nextDateInput">Data do Dia Seguinte:</label>
+                <input type="date" id="nextDateInput" />
+                <button id="submitDate">Confirmar</button>
+            </div>
         </div>
     </div>
     <!-- Modal para editar o nome -->
     <div id="editNameModal" class="modal" style="display:none;">
         <div class="modal-content">
-            <span class="close" onclick="document.getElementById('editNameModal').style.display='none'">&times;</span>
-            <h3>Alterar Nome Agendado</h3>
-            <label>Dia:</label>
-            <select id="editDaySelect"></select>
-            <label>Horário:</label>
-            <select id="editSlotSelect"></select>
-            <label>Novo Nome:</label>
-            <input type="text" id="editNameInput" />
-            <button id="editNameSubmit">Salvar</button>
+            <div class="modal-header">
+                <span class="modal-title">Alterar Nome Agendado</span>
+                <span class="close" onclick="document.getElementById('editNameModal').style.display='none'">&times;</span>
+            </div>
+            
+            <div class="modal-body">
+                <!--<h3>Alterar Nome Agendado</h3>-->
+                <label>Dia:</label>
+                <select id="editDaySelect"></select>
+                <label>Horário:</label>
+                <select id="editSlotSelect"></select>
+                <label>Novo Nome:</label>
+                <input type="text" id="editNameInput" />
+                <button id="editNameSubmit">Salvar</button>
+            </div>
         </div>
     </div>
     <!-- Atualiza as datas -->
     <div id="updateDatesModal" class="modal" style="display:none;">
         <div class="modal-content">
-            <span class="close" id="closeUpdateDatesModal">&times;</span>
-            <h3>Atualizar Datas</h3>
-            <label>Dia Corrente:</label>
-            <input type="date" id="updateCurrentDateInput" />
-            <label>Dia Seguinte:</label>
-            <input type="date" id="updateNextDateInput" />
-            <button id="updateDatesSubmit">Salvar</button>
+            <div class="modal-header">
+                <span class="modal-title">Atualizar Datas</span>
+                <span class="close" id="closeUpdateDatesModal">&times;</span>
+            </div>
+            
+            <div class="modal-body">
+                <label>Dia Corrente:</label>
+                <input type="date" id="updateCurrentDateInput" />
+                <label>Dia Seguinte:</label>
+                <input type="date" id="updateNextDateInput" />
+                <button id="updateDatesSubmit">Salvar</button>
+            </div>            
         </div>
     </div>
     <!-- Modal para Histórico por pessoa -->
     <div id="historyModal" class="modal" style="display:none;">
         <div class="modal-content-history">
-            <span class="close" id="closeHistoryModal">&times;</span>
-            <h3>Consultar Histórico</h3>
-            <div class="input-row">
-                <label>Nome:</label>
-                <select id="historyNameSelect"></select>
-                <label>Mês:</label>
-                <select id="monthSelect">
-                    <option value="Todos">Todos</option>
-                    <option value="01">Janeiro</option>
-                    <option value="02">Fevereiro</option>
-                    <option value="03">Março</option>
-                    <option value="04">Abril</option>
-                    <option value="05">Maio</option>
-                    <option value="06">Junho</option>
-                    <option value="07">Julho</option>
-                    <option value="08">Agosto</option>
-                    <option value="09">Setembro</option>
-                    <option value="10">Outubro</option>
-                    <option value="11">Novembro</option>
-                    <option value="12">Dezembro</option>
-                </select>
-                <button id="historySearchBtn">Buscar</button>
-                <button id="historyPrintBtn">Imprimir</button>
+            <div class="modal-header">
+                <span class="modal-title">Relatório de Massagens</span>
+                <span class="close" id="closeHistoryModal">&times;</span>
             </div>
-            <div class="modal-scroll-content">
-                <div id="historyResult"></div>
+            <div class="modal-body">
+                <h3>Consultar Histórico</h3>
+                <div class="input-row">
+                    <label>Nome:</label>
+                    <select id="historyNameSelect"></select>
+                    <label>Mês:</label>
+                    <select id="monthSelect">
+                        <option value="Todos">Todos</option>
+                        <option value="01">Janeiro</option>
+                        <option value="02">Fevereiro</option>
+                        <option value="03">Março</option>
+                        <option value="04">Abril</option>
+                        <option value="05">Maio</option>
+                        <option value="06">Junho</option>
+                        <option value="07">Julho</option>
+                        <option value="08">Agosto</option>
+                        <option value="09">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                    <button id="historySearchBtn">Buscar</button>
+                    <button id="historyPrintBtn">Imprimir</button>
+                </div>
+                <div class="modal-scroll-content">
+                    <div id="historyResult"></div>
+                </div>
             </div>
         </div>
     </div>
