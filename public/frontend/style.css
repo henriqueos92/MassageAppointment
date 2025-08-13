@@ -35,6 +35,13 @@ header {
     padding: 20px;
 }
 
+.container-black-mode {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
 .white-background {
     background-color: white; /* Define o fundo branco */
     padding: 20px; /* Adiciona espaçamento interno */
@@ -133,13 +140,14 @@ button:disabled {
 
 .footer {
     text-align: center;
-    background-color: #f0f0f0;
-    color: #aaaaaa;
+    background-color: inherit; /* pega a cor do body */
+    color: inherit;
     width: 100%;
     bottom: 0;
     flex-shrink: 0; 
     user-select: none;
 }
+
 
 .print-button-container {
     position: absolute;
@@ -169,6 +177,7 @@ button:disabled {
     bottom: 0;
     left: 0;
     background-color: #f0f0f0;
+    color: #aaaaaa;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -367,6 +376,12 @@ h1 {
     position: absolute;
     top: 15px;
     right: 20px;
+}
+
+.botao-black-mode {
+    position: absolute;
+    top: 20px;
+    right: 50px;
 }
 
 .menu-icon {
@@ -568,3 +583,43 @@ h1 {
     color: #7900b1;
 }*/
 
+.night-label {
+	opacity: 0.2;
+}
+
+.layout {
+	width: 70vw;
+	max-width: 300px;
+	min-width: 250px;
+	height: 30vh;
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr;
+	justify-content: center;
+	align-items: center;
+	gap: 30px;
+	font-size: 25px;
+}
+.layout:nth-child(1) {
+	text-align: right;
+}
+svg {
+	width: 80%;
+	height: 100%;
+	cursor: pointer;
+}
+#night-content {
+	opacity: 0.5;
+}
+.inner-shadow {
+	stroke-opacity: 0.1;
+	stroke-width: 5;
+	stroke: black;
+	fill: none;
+}
+.container-black-mode input {
+	position: absolute;
+	opacity: 0;
+	cursor: pointer;
+	height: 0;
+	width: 0;
+}

@@ -20,4 +20,5 @@ setInterval(function () {
             window.location.href = paginaOriginal;
         }
     }
+    
 }, 500);
