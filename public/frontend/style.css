@@ -13,6 +13,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
+    transition: background-color 2s ease, color 2s ease;
 }
 
 header {
@@ -26,6 +27,7 @@ header {
     font-weight: bold;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 2s ease, color 2s ease;
 }
 
 .container {
@@ -49,6 +51,7 @@ header {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra */
     margin: 20px auto; /* Centraliza o conteúdo horizontalmente */
     max-width: 800px; /* Define uma largura máxima */
+    transition: background-color 2s ease, color 2s ease;
 }
 
 .tab-buttons {
@@ -79,6 +82,34 @@ header {
     border: 2px solid #808080;
 }
 
+body.dark-mode .tab-button {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 2px solid #555555;
+}
+
+body.dark-mode .tab-button:hover {
+    background-color: #3a3a3a;
+}
+
+body.dark-mode .tab-button:disabled {
+    background-color: #555555;
+    color: #bbbbbb;
+    border: 2px solid #777777;
+    cursor: not-allowed;
+}
+
+body.dark-mode .white-background {
+    background-color: black;
+    color: white;
+    transition: background-color 2s ease, color 2s ease;
+}
+
+body.dark-mode .white-background button {
+    border-color: white;
+    transition: background-color 2s ease, color 2s ease;
+}
+
 .tab-content {
     display: none;
     width: 800px;
@@ -92,6 +123,29 @@ header {
 #time-slots {
     width: 800px;
     margin: 20px auto 0;
+}
+
+.main-content button {
+    background-color: inherit;
+    border-color: inherit;
+    color: inherit;
+}
+
+body.dark-mode button {
+    background-color: #2a2a2a;
+    color: #ffffff;
+    border: 2px solid #555555;
+}
+
+body.dark-mode button:hover {
+    background-color: #3a3a3a;
+}
+
+body.dark-mode button:disabled {
+    background-color: #555555;
+    color: #bbbbbb;
+    border: 2px solid #777777;
+    cursor: not-allowed;
 }
 
 button {
@@ -182,6 +236,7 @@ button:disabled {
     justify-content: center;
     align-items: center;
     padding: 10px 0;
+    transition: background-color 2s ease, color 2s ease;
 }
 
 h1 { 
@@ -405,7 +460,7 @@ h1 {
 
 .dropdown-menu button {
     width: 95%;
-    padding: 10px 20px;
+    padding: 10px 10px;
     border: none;
     background: none;
     text-align: left;
@@ -415,7 +470,7 @@ h1 {
 
 .dropdown-menu button:hover {
     background: #ba68c88a;
-    padding: 10px 20px;
+    padding: 10px 10px;
     border-radius: 6px;
 }
 

@@ -885,8 +885,9 @@ document.addEventListener("DOMContentLoaded", function () {
             x: 2,
         }, duration)
         .to('#day-content', { duration: duration * 0.5, opacity: 0.5 }, duration * 1.5)
-        .to('body', { backgroundColor: '#b0b0b9', color: '#black', duration: duration * 2 }, 0)
-        .to('.rodape', { backgroundColor: '#b0b0b9', color: '#dfdfdfff', duration: duration * 2 }, 0);
+        .to('header', { background: 'linear-gradient(90deg, #7d001dff 0%, #430062ff 14%, #3f005cff 26%, #330150ff 40%)', color: 'white', duration: duration * 0.6 }, 0)
+        .to('body', { backgroundColor: '#686869ff', color: '#black', duration: duration * 2 }, 0)
+        .to('.rodape', { backgroundColor: '#686869ff', color: '#dfdfdfff', duration: duration * 2 }, 0);
 
     let stars = Array.from(document.getElementsByClassName('star'));
     stars.map(star => gsap.to(star, { duration: 'random(0.4, 1.5)', repeat: -1, yoyo: true, opacity: 'random(0.2, 0.5)' }));
@@ -902,8 +903,10 @@ document.addEventListener("DOMContentLoaded", function () {
         isDay = switchToggle.checked == true;
         if (isDay) {
             toNightAnimation.reverse();
+            document.body.classList.remove('dark-mode');
         } else {
             toNightAnimation.play();
+            document.body.classList.add('dark-mode');
         }
     }
 
