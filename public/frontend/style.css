@@ -71,7 +71,7 @@ header {
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-top: 90px;
+    padding: 0;
 }
 
 .white-background {
@@ -484,7 +484,7 @@ h1 {
 
 .botao-black-mode {
     position: absolute;
-    top: 17px;
+    top: 12px;
     right: 50px;
 }
 
@@ -846,7 +846,9 @@ menu-wrapper{
     justify-content: center;
     background-color: var(--bgColorMenu);    
     box-shadow: 0 4px 10px rgba(255, 255, 255, 0.25); 
-    transition: background-color var(--duration);
+    transition: 
+        transform var(--duration) ease,
+        background-color var(--duration) ease;
 }
 .menu-wrapper .menu__item{
     all: unset;
@@ -914,7 +916,9 @@ menu-wrapper{
     clip-path: url(#menu);
     will-change: transform;
     background-color: var(--bgColorMenu);
-    transition: transform var(--timeOut , var(--duration));
+    transition: 
+        transform var(--duration) ease,
+        background-color var(--duration) ease;
 }
 .menu-wrapper .svg-container {
     width: 0;
