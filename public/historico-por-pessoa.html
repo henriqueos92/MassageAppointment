@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Relatório de Massagens</title>
+    <link rel="stylesheet" href="frontend/style.css">
+    <link rel="icon" href="gui/themes/img/favicon.ico" type="image/x-icon">
+</head>
+<body>
+    <div class="container main-content" id="mainContent">
+        <div class="historyModalTela">
+            <div class="modal-content-history-tela">
+                <div class="modal-header">
+                    <span class="modal-title">Relatório de Massagens</span>
+                </div>
+                <div class="modal-body">
+                    <div class="input-row">
+                        <label>Nome:</label>
+                        <select id="historyNameSelect"></select>
+                        <label>Mês:</label>
+                        <select id="monthSelect">
+                            <option value="Todos">Todos</option>
+                            <option value="01">Janeiro</option>
+                            <option value="02">Fevereiro</option>
+                            <option value="03">Março</option>
+                            <option value="04">Abril</option>
+                            <option value="05">Maio</option>
+                            <option value="06">Junho</option>
+                            <option value="07">Julho</option>
+                            <option value="08">Agosto</option>
+                            <option value="09">Setembro</option>
+                            <option value="10">Outubro</option>
+                            <option value="11">Novembro</option>
+                            <option value="12">Dezembro</option>
+                        </select>
+                        <button id="historySearchBtn">Buscar</button>
+                        <button id="historyPrintBtn">Imprimir</button>
+                    </div>
+                    <hr style="margin: 10px 0; border: 1px solid #ccc;">
+                    <div class="modal-scroll-content">
+                        <div id="historyResult"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="backend/script.js"></script>
+    <script src="devtools-detect.js"></script>
+</body>
+</html>

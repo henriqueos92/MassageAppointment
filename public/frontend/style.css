@@ -18,6 +18,20 @@ body {
 
 header {
     /*background: linear-gradient(90deg, #f40032, #7900b1, #8600a9);*/
+    /*background: linear-gradient(linear, left top, right top, color-stop(0, #f40032), color-stop(14%, #7900b1), color-stop(26%, #7900b1), color-stop(40%, #8600a9));*/
+    background: linear-gradient(90deg, #f40032 0, #7900b1 14%, #7900b1 26%, #8600a9 40%);
+    color: white;
+    padding: 5px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: bold;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+.newHeader {
+    /*background: linear-gradient(90deg, #f40032, #7900b1, #8600a9);*/
     background: linear-gradient(linear, left top, right top, color-stop(0, #f40032), color-stop(14%, #7900b1), color-stop(26%, #7900b1), color-stop(40%, #8600a9));
     background: linear-gradient(90deg, #f40032 0, #7900b1 14%, #7900b1 26%, #8600a9 40%);
     color: white;
@@ -27,7 +41,9 @@ header {
     font-weight: bold;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    transition: background-color 2s ease, color 2s ease;
+    opacity: 100;
+    transition: opacity 2s ease;
+    height: 6em;
 }
 
 .container {
@@ -37,11 +53,25 @@ header {
     padding: 20px;
 }
 
+.container2 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 0;
+}
+
 .container-black-mode {
     flex: 1;
     display: flex;
     flex-direction: column;
     padding: 10px;
+}
+
+.container-black-mode-new {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top: 90px;
 }
 
 .white-background {
@@ -50,7 +80,7 @@ header {
     border-radius: 8px; /* Adiciona cantos arredondados */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra */
     margin: 20px auto; /* Centraliza o conteúdo horizontalmente */
-    max-width: 800px; /* Define uma largura máxima */
+    /*max-width: 800px; /* Define uma largura máxima */
     transition: background-color 2s ease, color 2s ease;
 }
 
@@ -81,6 +111,19 @@ header {
     color: #808080;
     border: 2px solid #808080;
 }
+body.dark-mode .rodape,
+body.dark-mode {
+    background-color: #686869ff !important;
+    color: #dfdfdfff !important;
+}
+
+body.dark-mode .modal {
+    background-color: rgba(0, 0, 0, 0.518);
+}
+
+body.dark-mode #historyModal {
+    background-color: rgba(0, 0, 0, 0.518);
+}
 
 body.dark-mode .tab-button {
     background-color: #2a2a2a;
@@ -102,12 +145,18 @@ body.dark-mode .tab-button:disabled {
 body.dark-mode .white-background {
     background-color: black;
     color: white;
-    transition: background-color 2s ease, color 2s ease;
+    transition: background-color 2s ease, color 3s ease;
 }
 
 body.dark-mode .white-background button {
     border-color: white;
-    transition: background-color 2s ease, color 2s ease;
+    transition: background-color 2s ease, color 0.5s ease;
+}
+
+body.dark-mode .menu, 
+body.dark-mode .menu__border {
+    background-color: black;
+    transition: background-color 2s ease, color 0.5s ease;
 }
 
 .tab-content {
@@ -246,14 +295,14 @@ h1 {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1;
+    z-index: 100;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     backdrop-filter: blur(6px);
     overflow: auto; 
-    background-color: rgba(0, 0, 0, 0.4);
+    background-color: rgba(255, 255, 255, 0.3);
     align-items: center;
     justify-content: center;
 }
@@ -435,7 +484,7 @@ h1 {
 
 .botao-black-mode {
     position: absolute;
-    top: 20px;
+    top: 17px;
     right: 50px;
 }
 
@@ -446,7 +495,13 @@ h1 {
     user-select: none;
 }
 
-.dropdown-menu {
+.menu-item-container {
+    position: relative;         /* dropdown fica relativo a este container */
+    padding: 0 90px;
+}
+
+/*drop down antigo */
+.dropdown-menu-old {
     display: none;
     position: absolute;
     right: 15px;
@@ -458,7 +513,7 @@ h1 {
     margin-top: 5px;
 }
 
-.dropdown-menu button {
+.dropdown-menu-old button {
     width: 95%;
     padding: 10px 10px;
     border: none;
@@ -466,6 +521,48 @@ h1 {
     text-align: left;
     cursor: pointer;
     font-size: 16px;
+}
+
+.dropdown-menu-old button:hover {
+    background: #ba68c88a;
+    padding: 10px 10px;
+    border-radius: 6px;
+}
+
+
+/*dropdown novo*/
+
+.dropdown-menu {
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%) scaleY(0); /* começa escondido */
+    transform-origin: top;
+    opacity: 0;
+    pointer-events: none;  /* não clicável enquanto fechado */
+    background: #fff;
+    min-width: 200px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-radius: 6px;
+    z-index: 100;
+    transition: all 0.3s ease; 
+}
+
+.dropdown-menu.show {
+    transform: translateX(-50%) scaleY(1);
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.dropdown-menu-button {
+    width: 95%;
+    padding: 10px 10px;
+    border: none;
+    background: none;
+    text-align: left;
+    cursor: pointer;
+    font-size: 16px;
+    margin-left: 5px
 }
 
 .dropdown-menu button:hover {
@@ -479,19 +576,33 @@ h1 {
 #historyModal {
     display: none;
     position: fixed;
-    z-index: 10;
+    z-index: 100;
     left: 0;
     top: 0;
     width: 100vw;
     height: 100vh;
     backdrop-filter: blur(8px) saturate(180%);
-    background-color: rgba(0, 0, 0, 0.18);
+    background-color: rgba(255, 255, 255, 0.3);
+    align-items: center;
+    justify-content: center;
+}
+
+#historyModalTela {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(8px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.3);
     align-items: center;
     justify-content: center;
 }
 
 #historyModal .modal-content{
-    background: white;
+    background: rgb(255, 0, 0);
     border-radius: 24px;
     box-shadow: 0 8px 32px 0 rgba(31,38,135,0.10);
     backdrop-filter: blur(16px) saturate(180%);
@@ -543,12 +654,28 @@ h1 {
 }
 
 .modal-content-history {
-    background: rgba(255, 255, 255, 0.932);
+    background: rgba(255, 255, 255, 255);
     border-radius: 16px;
     /*padding: 30px 25px;*/
-    width: 90vw;
-    max-width: 90%; /* limite máximo */
-    max-height: 90%; /* altura máxima */
+    width: 90%;
+    max-width: 100%; /* limite máximo */
+    max-height: 100%; /* altura máxima */
+    overflow: hidden;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+    backdrop-filter: blur(10px);
+    /*border: 1px solid rgba(255, 255, 255, 0.18);*/
+    color: #000000;
+    font-family: 'Segoe UI', sans-serif;
+    text-align: center;
+}
+
+.modal-content-history-tela {
+    background: rgba(255, 255, 255, 255);
+    border-radius: 16px;
+    /*padding: 30px 25px;*/
+    width: 100%;
+    max-width: 100%; /* limite máximo */
+    max-height: 70%; /* altura máxima */
     overflow: hidden;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
     backdrop-filter: blur(10px);
@@ -671,10 +798,163 @@ svg {
 	stroke: black;
 	fill: none;
 }
+
+.container-black-mode-new input,
 .container-black-mode input {
 	position: absolute;
 	opacity: 0;
 	cursor: pointer;
 	height: 0;
 	width: 0;
+}
+
+
+/* MENU SUPERIOR */ 
+ html {
+    box-sizing: border-box;
+    /*--bgColorMenu : #1d1d27;*/
+    --bgColorMenu : #FFFFFF;
+    --duration: .7s;    
+}
+html *,
+html *::before,
+html *::after {
+    box-sizing: inherit;
+}
+menu-wrapper{   
+    margin: 0;
+    display: flex;
+    height: 40vh;
+    overflow: hidden;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffb457;
+    -webkit-tap-highlight-color: transparent;
+    transition: background-color var(--duration);
+}
+.menu-wrapper .menu{
+    margin: 0;
+    display: flex;
+    /* Works well with 100% width  */
+    /*width: 32.05em;*/
+    width: 100%;
+    font-size: 1.5em;
+    padding: 0 2.85em;
+    position: relative;
+    gap: 1em; 
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bgColorMenu);    
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.25); 
+    transition: background-color var(--duration);
+}
+.menu-wrapper .menu__item{
+    all: unset;
+    flex-grow: 1;
+    z-index: 100;
+    display: flex;
+    cursor: pointer;
+    position: relative;
+    border-radius: 50%;
+    width: 50px;   /* largura do círculo */
+    height: 50px;
+    align-items: center;
+    will-change: transform;
+    justify-content: center;
+    /*padding: 0.55em 0 0.85em;*/    
+    transition: transform var(--timeOut , var(--duration));   
+}
+.menu__item::before{
+    content: "";
+    z-index: -1;
+    /*width: 4.2em;
+    height: 4.2em;*/
+    width: 2.5em;
+    height: 2.5em;
+    border-radius: 100%;
+    position: absolute;
+    transform: scale(0);
+    transition: background-color var(--duration), transform var(--duration);   
+}
+.menu-wrapper .menu__item.active {
+    transform: translate3d(0, -.8em , 0);
+}
+.menu-wrapper .menu__item.active::before{
+    transform: scale(1);
+    background-color: var(--bgColorItem);
+}
+.menu-wrapper .icon{
+    /*width: 2.6em;
+    height: 2.6em;*/
+    width: 1.5em;
+    height: 1.5em;
+    stroke: #8600a9;
+    fill: transparent;
+    stroke-width: 1pt;
+    stroke-miterlimit: 10;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 400;
+}
+.menu-wrapper .menu__item.active .icon {
+    animation: strok 1.5s reverse; 
+    stroke: rgb(255, 255, 255);
+}
+@keyframes strok {
+    100% {
+        stroke-dashoffset: 400;
+    }
+}
+.menu-wrapper .menu__border{
+    left: 0;
+    bottom: 99%;
+    width: 8.9em;
+    height: 1.9em;
+    position: absolute;
+    clip-path: url(#menu);
+    will-change: transform;
+    background-color: var(--bgColorMenu);
+    transition: background-color var(--duration);
+}
+.menu-wrapper .svg-container {
+    width: 0;
+    height: 0;
+}
+@media screen and (max-width: 50em) {
+    .menu{
+        font-size: .8em;
+    }
+}
+
+#progressBar {
+    display: none;
+    position: fixed; /* fica sobre toda a tela */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(16px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.3);
+    z-index: 9999; /* acima de tudo */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    pointer-events: all; 
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-top: 4px solid #7900b1;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: auto;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }

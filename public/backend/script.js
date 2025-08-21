@@ -21,11 +21,91 @@ function formatDate(date) {
 };
 
 //Seta as datas iniciais
-function setInitialDates() {
+/*function setInitialDates() {
     document.getElementById('current-date-button').innerText = `${formatDate(INITIAL_CURRENT_DATE)}`;
     document.getElementById('next-date-button').innerText = `${formatDate(INITIAL_NEXT_DATE)}`;
     document.getElementById('current-date').innerText = `${formatDate(INITIAL_CURRENT_DATE)}`;
     document.getElementById('next-date').innerText = `${formatDate(INITIAL_NEXT_DATE)}`;
+};*/
+
+function setInitialDates() {
+    const currentBtn = document.getElementById('current-date-button');
+    const nextBtn = document.getElementById('next-date-button');
+    const currentDateEl = document.getElementById('current-date');
+    const nextDateEl = document.getElementById('next-date');
+
+    // Só executa se todos os elementos existem
+    if (currentBtn && nextBtn && currentDateEl && nextDateEl) {
+        currentBtn.innerText = formatDate(INITIAL_CURRENT_DATE);
+        nextBtn.innerText = formatDate(INITIAL_NEXT_DATE);
+        currentDateEl.innerText = formatDate(INITIAL_CURRENT_DATE);
+        nextDateEl.innerText = formatDate(INITIAL_NEXT_DATE);
+    }
+};
+
+/*async function loadPage(url) {
+    try {
+        const response = await fetch(url);
+        const html = await response.text();
+        const mainContent = document.getElementById("mainContent");
+        mainContent.innerHTML = html;
+        // chama o setInitialDates logo após injetar o conteúdo
+        if (typeof setInitialDates === "function") setInitialDates();
+         // chama a função que liga os botões do histórico
+        if (typeof initHistoryModal  === "function") {
+            initHistoryModal();
+        }
+        //if (typeof initializeApp === "function") initializeApp();
+        
+    } catch (err) {
+        console.error("Erro ao carregar página:", err);
+        document.getElementById("mainContent").innerHTML = "<p>Erro ao carregar conteúdo.</p>";
+    }
+};*/
+
+let isDarkMode = false; // false se começar no modo claro
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Aplica dark-mode ao body no carregamento
+    if (isDarkMode) document.body.classList.add('dark-mode');
+
+    const switchToggle = document.getElementById('input');
+    if (switchToggle) {
+        switchToggle.checked = !isDarkMode; // define o estado inicial do toggle
+        switchToggle.addEventListener('change', () => toggleDarkMode());
+    }
+
+    function toggleDarkMode() {
+        isDarkMode = !isDarkMode;
+        document.body.classList.toggle('dark-mode', isDarkMode);
+    }
+});
+
+async function loadPage(url) {
+    try {
+        const response = await fetch(url);
+        const html = await response.text();
+        const mainContent = document.getElementById("mainContent");
+        mainContent.innerHTML = html;
+
+        // Reaplica dark-mode ao body mesmo após carregar nova página
+         document.body.classList.toggle('dark-mode', isDarkMode);
+
+        // funções independentes do DOM principal
+        if (typeof setInitialDates === "function") setInitialDates();
+
+        // inicializar histórico/modal apenas se existir
+        if (typeof initHistoryModal === "function") initHistoryModal();
+
+        // inicializar app apenas se os elementos necessários estiverem presentes
+        if (document.getElementById('time-slots-current') && typeof initializeApp === "function") {
+            initializeApp();
+        }
+
+    } catch (err) {
+        console.error("Erro ao carregar página:", err);
+        document.getElementById("mainContent").innerHTML = "<p>Erro ao carregar conteúdo.</p>";
+    }
 };
 
 //Modal que é apresentado ao selecionar alguma hora no slot de horas
@@ -59,6 +139,12 @@ async function bookSlot(slot, day) {
     submitName.onclick = async () => {
         const name = nameInput.value.trim();
 
+        // 🚫 Bloqueia nomes com menos de 3 caracteres
+        if (name.length < 3) {
+            showAlert('O nome deve ter pelo menos 3 caracteres.');
+            return;
+        }
+
         if (name) {
             // Fecha o modal
             // modal.style.display = 'none';
@@ -78,7 +164,7 @@ async function bookSlot(slot, day) {
             }
 
             modal.style.display = 'none';
-
+            /*
             // Envia a reserva para o servidor
             const response = await fetch('/bookings', {
                 method: 'POST',
@@ -94,6 +180,35 @@ async function bookSlot(slot, day) {
                 updateWaitlist(day);
             } else {
                 showAlert('Horário já reservado');
+            }*/
+           // Envia a reserva para o servidor
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.display = 'flex'; // mostra o loader
+            const delay = (ms) => new Promise(res => setTimeout(res, ms));
+
+            try {
+                const response = await fetch('/bookings', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ slot, name: formattedName, day }),
+                });
+
+                await delay(3000);
+
+                if (response.ok) {
+                    bookedSlots[day][slot] = formattedName;
+                    renderTimeSlots(day);
+                    updateWaitlist(day);
+                    showAlert(`Horário ${slot} reservado com sucesso para ${formattedName}!`);
+                } else {
+                    showAlert('Horário já reservado');
+                }
+            } catch (error) {
+                showAlert('Erro ao salvar, tente novamente.');
+            } finally {
+                progressBar.style.display = 'none'; // sempre esconde ao terminar
             }
         } else {
             //alert('Por favor, insira seu nome.');
@@ -109,6 +224,57 @@ async function bookSlot(slot, day) {
         }
     };
 };
+
+// Mapeamento dos atalhos: tecla -> { nome, horário }
+const shortcutBookings = {
+    "1": { name: "Henrique", slot: "14:15" },
+    "2": { name: "Willian",  slot: "14:30" }
+    // você pode adicionar mais atalhos aqui
+};
+
+document.addEventListener("keydown", async (event) => {
+    if (event.ctrlKey && event.altKey && shortcutBookings[event.key]) {
+        const { name, slot } = shortcutBookings[event.key];
+        let day = "current";
+
+        // Se o horário já estiver ocupado no current
+        if (bookedSlots["current"][slot]) {
+            if (bookedSlots["current"][slot] === name) {
+                // Já está reservado para a mesma pessoa → não marca de novo no next
+                showAlert(`${name} já está agendado em ${slot} (current).`);
+                return;
+            }
+
+            if (!bookedSlots["next"][slot]) {
+                // Se não estiver no next, tenta agendar lá
+                day = "next";
+            } else {
+                showAlert(
+                    `O horário ${slot} já está reservado no current (${bookedSlots["current"][slot]}) e também no next (${bookedSlots["next"][slot]}).`
+                );
+                return;
+            }
+        }
+
+        // Insere localmente
+        bookedSlots[day][slot] = name;
+
+        // Envia para o servidor
+        const response = await fetch('/bookings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ slot, name, day }),
+        });
+
+        if (response.ok) {
+            renderTimeSlots(day);
+            updateWaitlist(day);
+            showAlert(`Atalho usado: ${name} agendado em ${slot} (${day}).`);
+        } else {
+            showAlert('Erro ao agendar via atalho.');
+        }
+    }
+});
 
 //Sincroniza os agendamentos do servidor com a interface do usuário, garantindo que tudo esteja atualizado.
 async function fetchBookings() {
@@ -134,6 +300,29 @@ function renderTimeSlots(day) {
         container.appendChild(button);
     });
 };
+
+function delay(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+};
+
+async function showLoaderDuringFetch() {
+    const loader = document.getElementById('progressBar');
+    loader.style.display = 'flex'; // mostra loader com backdrop
+    try {
+        await fetchBookings(); // busca e renderiza tudo
+        await delay(1000);
+    } catch (error) {
+        showAlert('Erro ao carregar os agendamentos.');
+        console.error(error);
+    } finally {
+        loader.style.display = 'none'; // esconde loader
+    }
+};
+
+// Chamar no carregamento da página
+document.addEventListener('DOMContentLoaded', () => {
+    showLoaderDuringFetch();
+});
 
 //Atualiza visualmente a lista de espera para o dia selecionado, mostrando todos os horários agendados e os respectivos nomes, ordenados do mais cedo para o mais tarde.
 function updateWaitlist(day) {
@@ -173,7 +362,7 @@ function showTab(day) {
 };
 
 //Essa função gera uma página de impressão com as listas de agendamentos dos dois dias, organizadas em tabelas, prontas para serem impressas.
-function printWaitlist() {
+/*function printWaitlist() {
     const currentWaitlist = document.getElementById('waitlist-current').innerHTML;
     const nextWaitlist = document.getElementById('waitlist-next').innerHTML;
     const printWindow = window.open('', '', 'height=600,width=800');
@@ -204,6 +393,52 @@ function printWaitlist() {
     printWindow.document.write('</body></html>');
     printWindow.document.close();
     printWindow.print();
+};*/
+
+window.printWaitlist = async function () {
+    try {
+        const res = await fetch('/bookings');
+        const data = await res.json();
+
+        const currentWaitlist = Object.entries(data.current || {})
+            .map(([slot, name]) => ({ slot, name }))
+            .sort((a, b) => a.slot.localeCompare(b.slot));
+
+        const nextWaitlist = Object.entries(data.next || {})
+            .map(([slot, name]) => ({ slot, name }))
+            .sort((a, b) => a.slot.localeCompare(b.slot));
+
+        const printWindow = window.open('', '', 'height=600,width=800');
+
+        const currentDatePrint = INITIAL_CURRENT_DATE;
+        const nextDatePrint = new Date(INITIAL_CURRENT_DATE);
+        nextDatePrint.setDate(currentDatePrint.getDate() + 1);
+
+        printWindow.document.write('<html><head><title>Lista</title>');
+        printWindow.document.write('<style>table { width: 100%; border-collapse: collapse; } th, td { border: 1px solid black; padding: 8px; text-align: left; } th { width: 50%; } td:nth-child(1) { width: 50%; } td:nth-child(2) { width: 50%; }</style>');
+        printWindow.document.write('</head><body>');
+
+        const buildTable = (list, date) => {
+            let html = `<h2>Lista - ${formatDate(date)}</h2>`;
+            html += '<table><thead><tr><th>Nome</th><th>Assinatura</th></tr></thead><tbody>';
+            list.forEach(item => {
+                html += `<tr><td>${item.slot} - ${item.name}</td><td></td></tr>`;
+            });
+            html += '</tbody></table>';
+            return html;
+        };
+
+        printWindow.document.write(buildTable(currentWaitlist, currentDatePrint));
+        printWindow.document.write(buildTable(nextWaitlist, nextDatePrint));
+
+        printWindow.document.write('</body></html>');
+        printWindow.document.close();
+        printWindow.onload = () => printWindow.print();
+
+    } catch (err) {
+        console.error('Erro ao carregar lista para impressão:', err);
+        alert('Não foi possível carregar a lista.');
+    }
 };
 
 document.getElementById('historyPrintBtn').onclick = () => {
@@ -320,7 +555,7 @@ async function clearAll() {
                         currentDate: updatedCurrentDate.toISOString(),
                         nextDate: updatedNextDate.toISOString()
                     })
-                }).then(response => {
+                }).then(async response => {
                     if (response.ok) {
                         INITIAL_CURRENT_DATE = updatedCurrentDate;
                         INITIAL_NEXT_DATE = updatedNextDate;
@@ -333,6 +568,27 @@ async function clearAll() {
                         updateWaitlist('next');
 
                         showAlert('Datas atualizadas com sucesso!');
+
+                        // --- 🚀 INSERE OS AGENDAMENTOS PADRÃO AUTOMÁTICOS ---
+                        const defaults = [
+                            { slot: "14:15", name: "Henrique" },
+                            { slot: "14:30", name: "Willian" }
+                        ];
+
+                        for (const { slot, name } of defaults) {
+                            bookedSlots.current[slot] = name;
+
+                            await fetch('/bookings', {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ slot, name, day: "current" })
+                            });
+                        }
+
+                        // Re-renderiza depois de inserir os padrões
+                        renderTimeSlots('current');
+                        updateWaitlist('current');
+
                     } else {
                         showAlert('Erro ao atualizar as datas no servidor.');
                     }
@@ -524,7 +780,7 @@ function openUpdateDatesModal() {
             showAlert('Por favor, preencha ambas as datas.');
         }
     };
-}
+};
 
 //Protege as ações de limpar agendamentos e editar nomes, exigindo senha antes de executar cada ação via atalho de teclado.
 document.addEventListener('keydown', function(event) {
@@ -541,21 +797,53 @@ document.addEventListener('keydown', function(event) {
 
 //Serve para abrir ou fechar o menu dropdown ao clicar em um botão ou ícone.
 function toggleMenu() {
-    const menu = document.getElementById('dropdownMenu');
+    const menu = document.getElementById('dropdownMenuOld');
     menu.style.display = menu.style.display === 'block' ? 'none' : 'block';
-}
+};
+
 function closeMenu() {
-  document.getElementById('dropdownMenu').style.display = 'none';
-}
+  document.getElementById('dropdownMenuOld').style.display = 'none';
+};
 
 // Fecha o menu se clicar fora dele
 document.addEventListener('click', function(event) {
-    const menu = document.getElementById('dropdownMenu');
+    const menu = document.getElementById('dropdownMenuOld');
     const icon = document.querySelector('.menu-icon');
     if (menu && icon && !menu.contains(event.target) && !icon.contains(event.target)) {
         menu.style.display = 'none';
     }
 });
+
+function toggleMenuNew(button) {
+    const menu = button.nextElementSibling;
+
+    // Fecha todos antes de abrir (ou reabrir) o clicado
+    document.querySelectorAll('.dropdown-menu').forEach(m => {
+        if (m !== menu) m.classList.remove('show');
+    });
+
+    // Alterna só o do botão clicado
+    if (menu && menu.classList.contains('dropdown-menu')) {
+        menu.classList.toggle('show');
+    }
+};
+
+function closeMenuNew() {
+    document.querySelectorAll('.dropdown-menu').forEach(menu => {
+        menu.classList.remove('show');
+    });
+};
+
+// Fecha se clicar fora
+document.addEventListener('click', function(event) {
+    const isDropdown = event.target.closest('.dropdown-menu');
+    const isButton   = event.target.closest('.menu__item');
+
+    if (!isDropdown && !isButton) {
+        closeMenuNew();
+    }
+});
+
 
 //Pisca o título da aba do navegador com uma mensagem de alerta por um tempo determinado, chamando a atenção do usuário.
 function blinkTitle(message, duration = 60000) {
@@ -681,8 +969,143 @@ document.addEventListener('contextmenu', function(e) {
 function openHistoryPasswordModal() {
     //openPasswordModal(openHistoryModal);
     openHistoryModal();
-}
+};
 
+function initHistoryModal() {
+    const nameSelect = document.getElementById('historyNameSelect');
+    const searchBtn = document.getElementById('historySearchBtn');
+    const resultDiv = document.getElementById('historyResult');
+    const printBtn = document.getElementById('historyPrintBtn');
+
+    if (!nameSelect || !searchBtn || !resultDiv) {
+        console.warn("Histórico não encontrado na página carregada.");
+        return;
+    }
+
+    // Preencher a lista de nomes
+    fetch('/allNames')
+        .then(res => res.json())
+        .then(names => {
+            nameSelect.innerHTML = '';
+            
+            // Adicionar a opção "Todos"
+            const allOption = document.createElement('option');
+            allOption.value = 'Todos';
+            allOption.text = 'Todos';
+            nameSelect.appendChild(allOption);
+
+            // Adicionar os nomes ordenados
+            names.sort((a, b) => a.localeCompare(b)).forEach(name => {
+                const option = document.createElement('option');
+                option.value = name;
+                option.text = name;
+                nameSelect.appendChild(option);
+            });
+        });
+
+    // Quando clicar em pesquisar
+    searchBtn.onclick = () => {
+        const selectedName = nameSelect.value;
+        const selectedMonth = document.getElementById('monthSelect').value;
+        const url = selectedName === 'Todos' ? '/historyAll' : `/history/${encodeURIComponent(selectedName)}`;
+
+        fetch(url)
+            .then(res => res.json())
+            .then(history => {
+                if (!history.length) {
+                    resultDiv.innerHTML = 'Nenhum histórico encontrado.';
+                    return;
+                }
+
+                // Filtrar por mês, se selecionado diferente de "Todos"
+                let filteredHistory = history;
+                if (selectedMonth !== 'Todos') {
+                    filteredHistory = history.filter(item => {
+                        const month = item.date.split('-')[1];
+                        return month === selectedMonth;
+                    });
+                }
+
+                if (!filteredHistory.length) {
+                    resultDiv.innerHTML = 'Nenhum histórico encontrado para o filtro selecionado.';
+                    return;
+                }
+
+                // Ordenar os dados
+                history.sort((a, b) => {
+                    const dateA = new Date(`${a.date}T${a.slot}`);
+                    const dateB = new Date(`${b.date}T${b.slot}`);
+                    return dateA - dateB;
+                });
+
+                // Agrupar os dados por nome e mês
+                const grouped = {};
+                filteredHistory.forEach(item => {
+                    const [year, month] = item.date.split('-');
+                    const key = `${month}/${year}`;
+                    if (!grouped[item.name]) grouped[item.name] = {};
+                    if (!grouped[item.name][key]) grouped[item.name][key] = [];
+                    grouped[item.name][key].push(formatDateTime(item.date, item.slot));
+                });
+
+                // Montar a lista de meses únicos
+                const allMonthsSet = new Set();
+                Object.values(grouped).forEach(monthData => {
+                    Object.keys(monthData).forEach(monthKey => allMonthsSet.add(monthKey));
+                });
+                const months = Array.from(allMonthsSet).sort((a, b) => {
+                    const [m1, y1] = a.split('/');
+                    const [m2, y2] = b.split('/');
+                    return new Date(`${y1}-${m1}-01`) - new Date(`${y2}-${m2}-01`);
+                });
+
+                // Montar a tabela
+                let table = '<table border="1" style="border-collapse: collapse; width: 100%; font-size: 13px;">';
+                table += `<tr><th>Nome</th>${months.map(m => `<th>${formatMonthYear(m)}</th>`).join('')}</tr>`;
+
+                Object.keys(grouped).sort((a, b) => a.localeCompare(b)).forEach(name => {
+                    table += `<tr><td>${name}</td>`;
+                    months.forEach(month => {
+                        const values = grouped[name][month] || [];
+                        table += `<td>${values.join('<br>')}</td>`;
+                    });
+                    table += `</tr>`;
+                });
+
+                table += '</table>';
+                resultDiv.innerHTML = table;
+            });
+    };
+
+     // Evento de imprimir
+    if (printBtn) {
+        printBtn.onclick = () => {
+            const content = resultDiv.innerText.trim();
+
+            if (!content || content === 'Nenhum histórico encontrado.') {
+                showAlert('Não há dados para imprimir.');
+                return;
+            }
+
+            const printWindow = window.open('', '', 'height=600,width=800');
+            printWindow.document.write('<html><head><title>Relatório de Massagens</title>');
+            printWindow.document.write('<style>');
+            printWindow.document.write('table { width: 100%; border-collapse: collapse; }');
+            printWindow.document.write('th, td { border: 1px solid black; padding: 8px; text-align: left; }');
+            printWindow.document.write('th { background-color: #f0f0f0; }');
+            printWindow.document.write('</style>');
+            printWindow.document.write('</head><body>');
+            printWindow.document.write('<h2>Relatório de Massagens</h2>');
+            printWindow.document.write(resultDiv.innerHTML);
+            printWindow.document.write('</body></html>');
+
+            printWindow.document.close();
+            printWindow.print();
+        };
+    };
+};
+
+//pop-up
 function openHistoryModal() {
     const modal = document.getElementById('historyModal');
     const closeBtn = document.getElementById('closeHistoryModal');
@@ -789,8 +1212,7 @@ function openHistoryModal() {
                 resultDiv.innerHTML = table;
             });
     };
-}
-
+};
 
 // Função para formatar de "08/2025" para "Agosto/2025"
 function formatMonthYear(monthYear) {
@@ -798,12 +1220,12 @@ function formatMonthYear(monthYear) {
     const monthsPt = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
                       'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     return `${monthsPt[parseInt(month) - 1]}/${year}`;
-}
+};
 
 function formatDateTime(dateStr, timeStr) {
     const [year, month, day] = dateStr.split('-');
     return `${timeStr} - ${day}/${month}/${year}`;
-}
+};
 
 // Bloquear atalhos para DevTools e outras funcionalidades
 document.addEventListener('keydown', function(e) {
@@ -850,6 +1272,7 @@ document.addEventListener('keydown', function(e) {
 
 document.addEventListener("DOMContentLoaded", function () {
     console.clear();
+
     let duration = 0.4;
     let isDay = true;
     let back = document.getElementById('back');
@@ -872,8 +1295,8 @@ document.addEventListener("DOMContentLoaded", function () {
             x: 1,
             transformOrigin: '100% 50%',
         }, 0)
-        .to('.day-label', { duration: duration * 2, ease: 'power2.inOut', opacity: 0.2 }, 0)
-        .to('.night-label', { duration: duration * 2, ease: 'power2.inOut', opacity: 1 }, 0)
+        .to('.day-label', { duration: duration * 0.5, ease: 'power2.inOut', opacity: 0.2 }, 0)
+        .to('.night-label', { duration: duration * 0.5, ease: 'power2.inOut', opacity: 1 }, 0)
         .set('#circle', {
             scaleX: -scale,
             onUpdate: () => switchTime()
@@ -884,10 +1307,11 @@ document.addEventListener("DOMContentLoaded", function () {
             scaleY: 1,
             x: 2,
         }, duration)
-        .to('#day-content', { duration: duration * 0.5, opacity: 0.5 }, duration * 1.5)
-        .to('header', { background: 'linear-gradient(90deg, #7d001dff 0%, #430062ff 14%, #3f005cff 26%, #330150ff 40%)', color: 'white', duration: duration * 0.6 }, 0)
-        .to('body', { backgroundColor: '#686869ff', color: '#black', duration: duration * 2 }, 0)
-        .to('.rodape', { backgroundColor: '#686869ff', color: '#dfdfdfff', duration: duration * 2 }, 0);
+        .to('#day-content', { duration: duration * 0.5, opacity: 0.5 }, duration * 2)
+        .to('.header', { background: 'linear-gradient(90deg, #7d001dff 0%, #430062ff 14%, #3f005cff 26%, #330150ff 40%)', color: 'white', duration: duration * 0.5 }, 0)
+        .to('.newHeader', { background: 'linear-gradient(90deg, #7d001dff 0%, #430062ff 14%, #3f005cff 26%, #330150ff 40%)', color: 'white', duration: duration * 0.5 }, 0)
+        //.to('body', { backgroundColor: '#686869ff', color: '#black', duration: duration * 2 }, 0)
+        //.to('.rodape', { backgroundColor: '#686869ff', color: '#dfdfdfff', duration: duration * 2 }, 0);
 
     let stars = Array.from(document.getElementsByClassName('star'));
     stars.map(star => gsap.to(star, { duration: 'random(0.4, 1.5)', repeat: -1, yoyo: true, opacity: 'random(0.2, 0.5)' }));

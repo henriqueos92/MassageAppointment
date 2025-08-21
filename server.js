@@ -20,8 +20,15 @@ function writeHistory(history) {
 
 function addToHistory(name, date, slot) {
     const history = readHistory();
-    history.push({ name, date, slot });
-    writeHistory(history);
+
+    const exists = history.some(
+        entry => entry.name === name && entry.date === date && entry.slot === slot
+    );
+
+    if (!exists) {
+        history.push({ name, date, slot });
+        writeHistory(history);
+    }
 }
 
 // Carrega o arquivo de ambiente correto
