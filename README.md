@@ -1,6 +1,10 @@
 # 🧖‍♂️ Massage Appointment
 
-![MassageAppointment](public/assets/massage_appointment_demo.png)
+**Antes**  
+![Versão antiga](public/assets/massage_appointment_demo.png)
+
+**Depois**  
+![Versão nova](public/assets/massage_appointment_demo_new.png)
 
 Um sistema simples de agendamento de massagem onde os usuários podem escolher o horário desejado e informar o nome. O nome será adicionado à lista de agendamentos.
 
@@ -22,6 +26,18 @@ Um sistema simples de agendamento de massagem onde os usuários podem escolher o
 ✔️ Apresentação da lista de agendamentos em tempo real
 ✔️ Modal de Senha para Limpar a lista de agendamentos com comando oculto
 ✔️ Interface amigável e intuitiva
+✔️ Alternância entre modo claro e escuro (Dark Mode) para melhor experiência visual
+✔️ Histórico de agendamentos por pessoa, permitindo consulta de registros anteriores
+✔️ Impressão rápida da lista de agendamentos diretamente pelo sistema
+✔️ Atualização automática (auto refresh) dos horários disponíveis sem recarregar a página
+✔️ Notificação visual para novos agendamentos em tempo real
+✔️ Design responsivo, garantindo usabilidade em dispositivos móveis, tablets e desktops
+✔️ Possibilidade de cancelar ou editar um agendamento já existente
+✔️ Filtros e buscas para localizar agendamentos específicos de forma rápida
+✔️ Estrutura modular com carregamento dinâmico de páginas sem perder o estado do sistema
+✔️ Proteção extra com modal de senha para ações administrativas
+✔️ Verificação de agentamento já existente impedindo duplicidade.
+✔️ Percistencia dos dados com json.
 
 ## 🛠️ Como Executar o Projeto
 
@@ -62,4 +78,4 @@ O projeto conta com um design leve e moderno, garantindo uma experiência agrad�
 
 ## 🚀 Melhorias Futuras
 
-🔹 Validação de horários duplicados 🔹 Integração com banco de dados para armazenamento persistente
+🔹 Integração com banco de dados para armazenamento persistente
