@@ -914,7 +914,7 @@ menu-wrapper{
     clip-path: url(#menu);
     will-change: transform;
     background-color: var(--bgColorMenu);
-    transition: background-color var(--duration);
+    transition: transform var(--timeOut , var(--duration));
 }
 .menu-wrapper .svg-container {
     width: 0;
