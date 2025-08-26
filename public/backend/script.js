@@ -11,8 +11,14 @@ const bookedSlots = {
 
 let blinkTitleInterval = null;
 let blinkTitleTimeout = null;
-let INITIAL_CURRENT_DATE = new Date();
-let INITIAL_NEXT_DATE = new Date();
+let INITIAL_CURRENT_DATE;
+let INITIAL_NEXT_DATE;
+
+// Depois inicializa
+const fixedDates = getFixedDates();
+INITIAL_CURRENT_DATE = fixedDates.current;
+INITIAL_NEXT_DATE = fixedDates.next;
+
 INITIAL_NEXT_DATE.setDate(INITIAL_CURRENT_DATE.getDate() + 1);
 
 function formatDate(date) {
@@ -28,7 +34,46 @@ function formatDate(date) {
     document.getElementById('next-date').innerText = `${formatDate(INITIAL_NEXT_DATE)}`;
 };*/
 
+// Função para salvar no localStorage
+function saveFixedDates(currentDate, nextDate) {
+    localStorage.setItem("fixedCurrentDate", currentDate.toISOString());
+    localStorage.setItem("fixedNextDate", nextDate.toISOString());
+}
+
+// Função para recuperar do localStorage (se existir)
+function getFixedDates() {
+    const savedCurrent = localStorage.getItem("fixedCurrentDate");
+    const savedNext = localStorage.getItem("fixedNextDate");
+
+    if (savedCurrent && savedNext) {
+        return {
+            current: new Date(savedCurrent),
+            next: new Date(savedNext)
+        };
+    }
+
+    // se não tiver nada salvo, usa a data atual
+    return {
+        current: new Date(),
+        next: new Date(Date.now() + 24 * 60 * 60 * 1000)
+    };
+}
+
 function setInitialDates() {
+    const currentBtn = document.getElementById('current-date-button');
+    const nextBtn = document.getElementById('next-date-button');
+    const currentDateEl = document.getElementById('current-date');
+    const nextDateEl = document.getElementById('next-date');
+
+    if (currentBtn && nextBtn && currentDateEl && nextDateEl) {
+        currentBtn.innerText = formatDate(INITIAL_CURRENT_DATE);
+        nextBtn.innerText = formatDate(INITIAL_NEXT_DATE);
+        currentDateEl.innerText = formatDate(INITIAL_CURRENT_DATE);
+        nextDateEl.innerText = formatDate(INITIAL_NEXT_DATE);
+    }
+}
+
+/*function setInitialDates() {
     const currentBtn = document.getElementById('current-date-button');
     const nextBtn = document.getElementById('next-date-button');
     const currentDateEl = document.getElementById('current-date');
@@ -41,7 +86,9 @@ function setInitialDates() {
         currentDateEl.innerText = formatDate(INITIAL_CURRENT_DATE);
         nextDateEl.innerText = formatDate(INITIAL_NEXT_DATE);
     }
-};
+};*/
+
+
 
 /*async function loadPage(url) {
     try {
@@ -559,7 +606,8 @@ async function clearAll() {
                     if (response.ok) {
                         INITIAL_CURRENT_DATE = updatedCurrentDate;
                         INITIAL_NEXT_DATE = updatedNextDate;
-
+                        saveFixedDates(INITIAL_CURRENT_DATE, INITIAL_NEXT_DATE);
+                        
                         // Atualiza os elementos da interface com as novas datas
                         setInitialDates();
                         renderTimeSlots('current');
@@ -764,6 +812,8 @@ function openUpdateDatesModal() {
                 if (response.ok) {
                     INITIAL_CURRENT_DATE = updatedCurrentDate;
                     INITIAL_NEXT_DATE = updatedNextDate;
+                    saveFixedDates(INITIAL_CURRENT_DATE, INITIAL_NEXT_DATE);
+
                     setInitialDates();
                     renderTimeSlots('current');
                     renderTimeSlots('next');
@@ -915,6 +965,10 @@ function startNotificationChecker() {
 
 //Inicializa o sistema, deixando a interface pronta, sincronizada e monitorando agendamentos e notificações.
 function initializeApp() {
+    const { current, next } = getFixedDates();
+    INITIAL_CURRENT_DATE = current;
+    INITIAL_NEXT_DATE = next;
+
     setInitialDates();
     showTab('current'); // Mostra a aba do dia corrente por padrão
     fetchBookings();
