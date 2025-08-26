@@ -35,15 +35,15 @@ header {
     background: linear-gradient(linear, left top, right top, color-stop(0, #f40032), color-stop(14%, #7900b1), color-stop(26%, #7900b1), color-stop(40%, #8600a9));
     background: linear-gradient(90deg, #f40032 0, #7900b1 14%, #7900b1 26%, #8600a9 40%);
     color: white;
-    padding: 5px;
+    padding: 2px;
     text-align: center;
-    font-size: 16px;
+    font-size: 15px;
     font-weight: bold;
     text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     opacity: 100;
     transition: opacity 2s ease;
-    height: 6em;
+    height: 5em;
 }
 
 .container {
@@ -79,7 +79,7 @@ header {
     padding: 20px; /* Adiciona espaçamento interno */
     border-radius: 8px; /* Adiciona cantos arredondados */
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra */
-    margin: 20px auto; /* Centraliza o conteúdo horizontalmente */
+    margin: 0 auto; /* Centraliza o conteúdo horizontalmente */
     /*max-width: 800px; /* Define uma largura máxima */
     transition: background-color 2s ease, color 2s ease;
 }
@@ -156,7 +156,10 @@ body.dark-mode .white-background button {
 body.dark-mode .menu, 
 body.dark-mode .menu__border {
     background-color: black;
-    transition: background-color 2s ease, color 0.5s ease;
+    transition: 
+        transform var(--duration) ease,
+        background-color var(--duration) ease;
+
 }
 
 .tab-content {
@@ -690,7 +693,7 @@ h1 {
     /*margin-top: 20px;*/
     flex: 1;
     min-height: 70px;
-    max-height: 57.5vh;
+    max-height: 60vh;
 }
 
 .modal-content-history button {
