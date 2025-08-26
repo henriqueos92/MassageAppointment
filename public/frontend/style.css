@@ -845,7 +845,7 @@ menu-wrapper{
     align-items: center;
     justify-content: center;
     background-color: var(--bgColorMenu);    
-    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.25); 
+    box-shadow: 0 4px 10px rgba(150, 150, 150, 0.25); 
     transition: 
         transform var(--duration) ease,
         background-color var(--duration) ease;
