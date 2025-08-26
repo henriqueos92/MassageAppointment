@@ -594,7 +594,7 @@ h1 {
     left: 0;
     top: 0;
     width: 100vw;
-    height: 100vh;
+    height: 90%;
     backdrop-filter: blur(8px) saturate(180%);
     background-color: rgba(255, 255, 255, 0.3);
     align-items: center;
@@ -690,7 +690,7 @@ h1 {
     /*margin-top: 20px;*/
     flex: 1;
     min-height: 70px;
-    max-height: 60vh;
+    max-height: 57.5vh;
 }
 
 .modal-content-history button {
