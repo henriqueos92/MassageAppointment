@@ -13,6 +13,7 @@ let blinkTitleInterval = null;
 let blinkTitleTimeout = null;
 let INITIAL_CURRENT_DATE;
 let INITIAL_NEXT_DATE;
+let isDarkMode = false; // false se começar no modo claro
 
 // Depois inicializa
 const fixedDates = getFixedDates();
@@ -27,17 +28,31 @@ function formatDate(date) {
 };
 
 //Seta as datas iniciais
-/*function setInitialDates() {
-    document.getElementById('current-date-button').innerText = `${formatDate(INITIAL_CURRENT_DATE)}`;
-    document.getElementById('next-date-button').innerText = `${formatDate(INITIAL_NEXT_DATE)}`;
-    document.getElementById('current-date').innerText = `${formatDate(INITIAL_CURRENT_DATE)}`;
-    document.getElementById('next-date').innerText = `${formatDate(INITIAL_NEXT_DATE)}`;
-};*/
+function setInitialDates() {
+    const currentBtn = document.getElementById('current-date-button');
+    const nextBtn = document.getElementById('next-date-button');
+    const currentDateEl = document.getElementById('current-date');
+    const nextDateEl = document.getElementById('next-date');
+
+    if (currentBtn && nextBtn && currentDateEl && nextDateEl) {
+        currentBtn.innerText = formatDate(INITIAL_CURRENT_DATE);
+        nextBtn.innerText = formatDate(INITIAL_NEXT_DATE);
+        currentDateEl.innerText = formatDate(INITIAL_CURRENT_DATE);
+        nextDateEl.innerText = formatDate(INITIAL_NEXT_DATE);
+    }
+}
 
 // Função para salvar no localStorage
 function saveFixedDates(currentDate, nextDate) {
     localStorage.setItem("fixedCurrentDate", currentDate.toISOString());
     localStorage.setItem("fixedNextDate", nextDate.toISOString());
+
+     // 🔹 envia pro backend também
+    fetch("/saveFixedDates", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentDate, nextDate })
+    });
 }
 
 // Função para recuperar do localStorage (se existir)
@@ -59,58 +74,7 @@ function getFixedDates() {
     };
 }
 
-function setInitialDates() {
-    const currentBtn = document.getElementById('current-date-button');
-    const nextBtn = document.getElementById('next-date-button');
-    const currentDateEl = document.getElementById('current-date');
-    const nextDateEl = document.getElementById('next-date');
 
-    if (currentBtn && nextBtn && currentDateEl && nextDateEl) {
-        currentBtn.innerText = formatDate(INITIAL_CURRENT_DATE);
-        nextBtn.innerText = formatDate(INITIAL_NEXT_DATE);
-        currentDateEl.innerText = formatDate(INITIAL_CURRENT_DATE);
-        nextDateEl.innerText = formatDate(INITIAL_NEXT_DATE);
-    }
-}
-
-/*function setInitialDates() {
-    const currentBtn = document.getElementById('current-date-button');
-    const nextBtn = document.getElementById('next-date-button');
-    const currentDateEl = document.getElementById('current-date');
-    const nextDateEl = document.getElementById('next-date');
-
-    // Só executa se todos os elementos existem
-    if (currentBtn && nextBtn && currentDateEl && nextDateEl) {
-        currentBtn.innerText = formatDate(INITIAL_CURRENT_DATE);
-        nextBtn.innerText = formatDate(INITIAL_NEXT_DATE);
-        currentDateEl.innerText = formatDate(INITIAL_CURRENT_DATE);
-        nextDateEl.innerText = formatDate(INITIAL_NEXT_DATE);
-    }
-};*/
-
-
-
-/*async function loadPage(url) {
-    try {
-        const response = await fetch(url);
-        const html = await response.text();
-        const mainContent = document.getElementById("mainContent");
-        mainContent.innerHTML = html;
-        // chama o setInitialDates logo após injetar o conteúdo
-        if (typeof setInitialDates === "function") setInitialDates();
-         // chama a função que liga os botões do histórico
-        if (typeof initHistoryModal  === "function") {
-            initHistoryModal();
-        }
-        //if (typeof initializeApp === "function") initializeApp();
-        
-    } catch (err) {
-        console.error("Erro ao carregar página:", err);
-        document.getElementById("mainContent").innerHTML = "<p>Erro ao carregar conteúdo.</p>";
-    }
-};*/
-
-let isDarkMode = false; // false se começar no modo claro
 
 document.addEventListener("DOMContentLoaded", function () {
     // Aplica dark-mode ao body no carregamento
@@ -211,23 +175,7 @@ async function bookSlot(slot, day) {
             }
 
             modal.style.display = 'none';
-            /*
-            // Envia a reserva para o servidor
-            const response = await fetch('/bookings', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ slot, name: formattedName, day }),
-            });
 
-            if (response.ok) {
-                bookedSlots[day][slot] = formattedName;
-                renderTimeSlots(day);
-                updateWaitlist(day);
-            } else {
-                showAlert('Horário já reservado');
-            }*/
            // Envia a reserva para o servidor
             const progressBar = document.getElementById('progressBar');
             progressBar.style.display = 'flex'; // mostra o loader
@@ -242,7 +190,7 @@ async function bookSlot(slot, day) {
                     body: JSON.stringify({ slot, name: formattedName, day }),
                 });
 
-                await delay(3000);
+                await delay(2000);
 
                 if (response.ok) {
                     bookedSlots[day][slot] = formattedName;
@@ -409,39 +357,6 @@ function showTab(day) {
 };
 
 //Essa função gera uma página de impressão com as listas de agendamentos dos dois dias, organizadas em tabelas, prontas para serem impressas.
-/*function printWaitlist() {
-    const currentWaitlist = document.getElementById('waitlist-current').innerHTML;
-    const nextWaitlist = document.getElementById('waitlist-next').innerHTML;
-    const printWindow = window.open('', '', 'height=600,width=800');
-    const currentDatePrint = INITIAL_CURRENT_DATE;
-    const nextDatePrint = INITIAL_NEXT_DATE;
-    nextDatePrint.setDate(currentDatePrint.getDate() + 1);
-
-    printWindow.document.write('<html><head><title>Lista</title>');
-    printWindow.document.write('<style>');
-    printWindow.document.write('table { width: 100%; border-collapse: collapse; }');
-    printWindow.document.write('th, td { border: 1px solid black; padding: 8px; text-align: left; }');
-    printWindow.document.write('th { width: 50%; }'); // Define a largura da coluna "Nome"
-    printWindow.document.write('td:nth-child(1) { width: 50%; }'); // Define a largura da coluna "Nome" no corpo
-    printWindow.document.write('td:nth-child(2) { width: 50%; }'); // Define a largura da coluna "Assinatura" no corpo
-    printWindow.document.write('</style>');
-    printWindow.document.write('</head><body>');
-
-    printWindow.document.write(`<h2>Lista - ${formatDate(currentDatePrint)}</h2>`);
-    printWindow.document.write('<table><thead><tr><th>Nome</th><th>Assinatura</th></tr></thead><tbody>');
-    printWindow.document.write(currentWaitlist.replace(/<div class="waitlist-item">/g, '<tr><td>').replace(/<\/div>/g, '</td><td></td></tr>'));
-    printWindow.document.write('</tbody></table>');
-
-    printWindow.document.write(`<h2>Lista - ${formatDate(nextDatePrint)}</h2>`);
-    printWindow.document.write('<table><thead><tr><th>Nome</th><th>Assinatura</th></tr></thead><tbody>');
-    printWindow.document.write(nextWaitlist.replace(/<div class="waitlist-item">/g, '<tr><td>').replace(/<\/div>/g, '</td><td></td></tr>'));
-    printWindow.document.write('</tbody></table>');
-
-    printWindow.document.write('</body></html>');
-    printWindow.document.close();
-    printWindow.print();
-};*/
-
 window.printWaitlist = async function () {
     try {
         const res = await fetch('/bookings');
@@ -1379,15 +1294,41 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let toggle = () => {
         isDay = switchToggle.checked == true;
+        const logo = document.querySelector(".menu-logo"); // pega a logo
+
         if (isDay) {
             toNightAnimation.reverse();
             document.body.classList.remove('dark-mode');
+            logo.src = "https://azship.com.br/wp-content/uploads/2025/07/Az-ship-logo-v2.svg"; // logo padrão
         } else {
             toNightAnimation.play();
             document.body.classList.add('dark-mode');
+            logo.src = "https://azship.com.br/wp-content/uploads/2025/07/logo.svg"; // logo branca
         }
     }
 
     toNightAnimation.reverse();
     toNightAnimation.pause();
+});
+
+// Delegação de eventos para abrir o modal ao clicar em slots
+document.addEventListener("click", (e) => {
+    const slot = e.target.closest("#time-slots-current div, #time-slots-next div");
+    if (slot) {
+        const time = slot.textContent;
+        document.getElementById("selectedTime").textContent = "Você selecionou: " + time;
+        document.getElementById("nameModal").style.display = "block";
+    }
+});
+
+// Fechar modal no botão X
+document.getElementById("closeModal").addEventListener("click", () => {
+    document.getElementById("nameModal").style.display = "none";
+});
+
+// (Opcional) Fechar modal clicando fora
+window.addEventListener("click", (e) => {
+    if (e.target.id === "nameModal") {
+        document.getElementById("nameModal").style.display = "none";
+    }
 });

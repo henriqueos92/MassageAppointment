@@ -51,6 +51,9 @@ header {
     display: flex;
     flex-direction: column;
     padding: 20px;
+    align-items: center;     /* 🔹 centraliza verticalmente */
+    justify-content: center;
+    
 }
 
 .container2 {
@@ -433,7 +436,7 @@ h1 {
 
 @media (max-width: 768px) {
     body {
-        padding: 0px;
+        padding: 0;
     }
 
     .container {
@@ -447,7 +450,7 @@ h1 {
 
     .tab-button {
         width: 100%; /* Botões ocupam toda a largura */
-        font-size: 14px; /* Reduz o tamanho da fonte */
+        font-size: 15px; /* Reduz o tamanho da fonte */
     }
 
     .tab-content {
@@ -474,8 +477,22 @@ h1 {
     }
 
     .rodape {
-        position: static; /* Remove a posição fixa */
+        position: center; /* Remove a posição fixa */
         padding: 10px;
+    }
+
+    .menu-right {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .menu-logo {
+        width: 20px; /* logo menor pra caber melhor */
+    }
+
+    .menu-item-container {      /* dropdown fica relativo a este container */
+        padding: 0 50px;
     }
 }
 
@@ -486,9 +503,8 @@ h1 {
 }
 
 .botao-black-mode {
-    position: absolute;
-    top: 12px;
-    right: 50px;
+    position: static;  /* segue o fluxo do flex */
+    margin: 0; 
 }
 
 .menu-icon {
@@ -590,20 +606,6 @@ h1 {
     justify-content: center;
 }
 
-#historyModalTela {
-    display: none;
-    position: fixed;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    width: 100vw;
-    height: 90%;
-    backdrop-filter: blur(8px) saturate(180%);
-    background-color: rgba(255, 255, 255, 0.3);
-    align-items: center;
-    justify-content: center;
-}
-
 #historyModal .modal-content{
     background: rgb(255, 0, 0);
     border-radius: 24px;
@@ -670,6 +672,19 @@ h1 {
     color: #000000;
     font-family: 'Segoe UI', sans-serif;
     text-align: center;
+}
+
+#historyModalTela {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: blur(8px) saturate(180%);
+    background-color: rgba(255, 255, 255, 0.3);
+    width: 90%;
 }
 
 .modal-content-history-tela {
@@ -838,15 +853,18 @@ menu-wrapper{
 .menu-wrapper .menu{
     margin: 0;
     display: flex;
+    align-items: center; 
     /* Works well with 100% width  */
     /*width: 32.05em;*/
     width: 100%;
     font-size: 1.5em;
-    padding: 0 2.85em;
+    /*padding: 0 2.85em;*/
     position: relative;
     gap: 1em; 
     align-items: center;
-    justify-content: center;
+    /*justify-content: center;*/
+    justify-content: space-between;
+    padding: 0 20px;
     background-color: var(--bgColorMenu);    
     box-shadow: 0 4px 10px rgba(150, 150, 150, 0.25); 
     transition: 
@@ -931,6 +949,24 @@ menu-wrapper{
     .menu{
         font-size: .8em;
     }
+}
+
+.logo-container {
+  display: flex;
+  align-items: center; /* alinha verticalmente */
+  /*justify-content: flex-start; /* força ficar à esquerda */
+  padding: 0 50px;
+}
+
+.menu-logo {
+  width: 100px;   /* ajusta o tamanho do logo */
+  height: auto;
+}
+
+.menu-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;  /* espaço entre blackmode e botões */
 }
 
 #progressBar {

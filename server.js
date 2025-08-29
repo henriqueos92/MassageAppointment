@@ -6,8 +6,33 @@ const fs = require('fs');
 const dotenv = require('dotenv');
 const isDev = fs.existsSync('.env.dev');
 const HISTORY_FILE = path.join(__dirname, 'history.json');
-let currentDate = new Date().toISOString();
-let nextDate = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString();
+//let currentDate = new Date().toISOString();
+//let nextDate = new Date(new Date().setDate(new Date().getDate() + 1)).toISOString();
+
+function getFixedDates() {
+    try {
+        return readDates(); // { current: "2025-09-09T..." , next: "2025-09-10T..." }
+    } catch (e) {
+        // fallback caso não exista ainda
+        const today = new Date();
+        const tomorrow = new Date();
+        tomorrow.setDate(today.getDate() + 1);
+        return {
+            current: today.toISOString(),
+            next: tomorrow.toISOString()
+        };
+    }
+}
+
+// funções de leitura/escrita em memória
+function readDates() {
+    return { current: currentDate, next: nextDate };
+}
+
+function writeDates(dates) {
+    if (dates.current) currentDate = dates.current;
+    if (dates.next) nextDate = dates.next;
+}
 
 function readHistory() {
     if (!fs.existsSync(HISTORY_FILE)) return [];
@@ -162,8 +187,6 @@ app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
 });
 
-
-
 app.post('/updateDates', (req, res) => {
     const { currentDate: newCurrentDate, nextDate: newNextDate } = req.body;
 
@@ -186,17 +209,13 @@ app.post('/validate-password', (req, res) => {
     }
 });
 
-/*app.put('/updateBookingName', (req, res) => {
-    const { day, slot, newName } = req.body;
-    if (bookings[day] && bookings[day][slot]) {
-        bookings[day][slot] = newName;
-        res.json({ success: true });
-    } else {
-        res.json({ success: false });
-    }
-});*/
+app.post("/saveFixedDates", (req, res) => {
+    const { currentDate: newCurrent, nextDate: newNext } = req.body;
+    writeDates({ current: newCurrent, next: newNext });
+    res.json({ success: true, dates: readDates() });
+});
 
-app.put('/updateBookingName', (req, res) => {
+/*app.put('/updateBookingName', (req, res) => {
     const { day, slot, newName } = req.body;
 
     // Atualiza o agendamento em memória (bookings) usando a chave day recebida (ex: "current" ou "next")
@@ -234,7 +253,69 @@ app.put('/updateBookingName', (req, res) => {
     } else {
         res.json({ success: false, message: 'Agendamento não encontrado' });
     }
+});*/
+
+app.put('/updateBookingName', (req, res) => {
+    const { day, slot, newName } = req.body;
+
+    if (bookings[day] && bookings[day][slot]) {
+        bookings[day][slot] = newName;
+
+        // 🔹 Pega as datas salvas (não recalcula na hora)
+        const { current, next } = getFixedDates();
+        let realDate = day;
+        if (day === 'current') {
+            realDate = current.slice(0, 10);
+        } else if (day === 'next') {
+            realDate = next.slice(0, 10);
+        }
+
+        const history = readHistory();
+        const record = history.find(item => item.date === realDate && item.slot === slot);
+
+        if (record) {
+            record.name = newName;
+            writeHistory(history);
+            console.log(`✅ Histórico atualizado: ${slot} em ${realDate} -> ${newName}`);
+        } else {
+            console.log('⚠️ Registro não encontrado no histórico para atualizar');
+        }
+
+        res.json({ success: true });
+    } else {
+        res.json({ success: false, message: 'Agendamento não encontrado' });
+    }
 });
+
+
+/*app.put('/updateBookingName', (req, res) => {
+    const { day, slot, newName } = req.body;
+
+    // Atualiza o agendamento em memória (bookings)
+    if (bookings[day] && bookings[day][slot]) {
+        bookings[day][slot] = newName;
+
+        // Pega datas fixas em memória
+        const dates = readDates();
+        let dateReal = day === 'current' ? dates.current : dates.next;
+
+        // Atualiza histórico
+        const history = readHistory();
+        const record = history.find(item => item.date === dateReal && item.slot === slot);
+
+        if (record) {
+            record.name = newName;
+            writeHistory(history);
+        } else {
+            console.log('⚠️ Registro não encontrado no histórico para atualizar');
+        }
+
+        res.json({ success: true });
+    } else {
+        res.json({ success: false, message: 'Agendamento não encontrado' });
+    }
+});*/
+
 
 app.get('/getDates', (req, res) => {
     res.json({
